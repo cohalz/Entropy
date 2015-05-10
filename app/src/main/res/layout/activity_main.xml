@@ -19,10 +19,10 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="66dp">
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView0"
                 android:background="#ff48fffd"
@@ -30,7 +30,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView1"
                 android:background="#ff48fffd"
@@ -39,7 +39,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView2"
                 android:background="#ff48fffd"
@@ -48,7 +48,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView3"
                 android:background="#ff48fffd"
@@ -57,7 +57,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView4"
                 android:background="#ff48fffd"
@@ -69,10 +69,10 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="66dp">
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView5"
                 android:background="#ff48fffd"
@@ -81,7 +81,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView6"
                 android:background="#ffffff"
@@ -90,7 +90,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView7"
                 android:background="#ffffff"
@@ -99,7 +99,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView8"
                 android:background="#ffffff"
@@ -108,7 +108,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView9"
                 android:background="#ff48fffd"
@@ -121,10 +121,10 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="70dp">
+            android:layout_height="66dp">
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView10"
                 android:background="#ffffff"
@@ -133,7 +133,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView11"
                 android:background="#ffffff"
@@ -142,7 +142,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView12"
                 android:background="#ffffff"
@@ -151,7 +151,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView13"
                 android:background="#ffffff"
@@ -160,7 +160,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView14"
                 android:background="#ffffff"
@@ -172,10 +172,10 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="70dp">
+            android:layout_height="66dp">
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView15"
                 android:background="#ff57ff6a"
@@ -184,7 +184,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView16"
                 android:background="#ffffff"
@@ -193,7 +193,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView17"
                 android:background="#ffffff"
@@ -202,7 +202,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView18"
                 android:background="#ffffff"
@@ -211,7 +211,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView19"
                 android:background="#ff57ff6a"
@@ -223,10 +223,10 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="70dp" >
+            android:layout_height="66dp" >
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView20"
                 android:background="#ff57ff6a"
@@ -235,7 +235,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView21"
                 android:background="#ff57ff6a"
@@ -244,7 +244,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView22"
                 android:background="#ff57ff6a"
@@ -253,7 +253,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView23"
                 android:background="#ff57ff6a"
@@ -262,7 +262,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="70dp"
+                android:layout_width="66dp"
                 android:layout_height="fill_parent"
                 android:id="@+id/textView24"
                 android:background="#ff57ff6a"

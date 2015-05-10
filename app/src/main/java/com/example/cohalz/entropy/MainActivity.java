@@ -88,6 +88,30 @@ public class MainActivity extends ActionBarActivity {
               i++;
                 count++;
             }
+              i = 1;
+              while (y + i < 5 && ((ColorDrawable) view[y + i][x].getBackground()).getColor() == Color.parseColor(white)) {
+                  view[y + i][x].setText("test");
+                  i++;
+                  count++;
+              }
+              i = 1;
+              while (y - i >= 0 && ((ColorDrawable) view[y - i][x].getBackground()).getColor() == Color.parseColor(white)) {
+                  view[y - i][x].setText("test");
+                  i++;
+                  count++;
+              }
+              i = 1;
+              while (x - i >= 0 && ((ColorDrawable) view[y][x - i].getBackground()).getColor() == Color.parseColor(white)) {
+                  view[y][x - i].setText("test");
+                  i++;
+                  count++;
+              }
+              i = 1;
+              while (x + i < 5 && ((ColorDrawable) view[y][x + i].getBackground()).getColor() == Color.parseColor(white)) {
+                  view[y][x + i].setText("test");
+                  i++;
+                  count++;
+              }
               if(count > 0){
                   flag = 1;
                   pastx = x;
@@ -95,7 +119,7 @@ public class MainActivity extends ActionBarActivity {
 
               }
           }
-          else if (flag == 1 && col.getColor() == Color.parseColor(white)) {
+          else if (flag == 1) {
 
             int i = 1;
             while (pasty - i >= 0 & pastx - i >= 0) {
@@ -117,13 +141,33 @@ public class MainActivity extends ActionBarActivity {
               view[pasty + i][pastx - i].setText("");
               i++;
             }
-            if(isDiag(pastx,pasty,x,y)){
+             i = 1;
+              while (pasty - i >= 0) {
+                  view[pasty - i][pastx].setText("");
+                  i++;
+              }
+              i = 1;
+              while (pasty + i < 5){
+                  view[pasty + i][pastx].setText("");
+                  i++;
+              }
+              i = 1;
+              while (pastx + i < 5){
+                  view[pasty][pastx + i].setText("");
+                  i++;
+              }
+              i = 1;
+              while (pastx - i >= 0){
+                  view[pasty][pastx - i].setText("");
+                  i++;
+              }
+            if(isDiag(pastx,pasty,x,y) && col.getColor() == Color.parseColor(white)){
                 view[pasty][pastx].setBackgroundColor(Color.parseColor(white));
                 view[y][x].setBackgroundColor(Color.parseColor(ps[ban]));
               view[y][x].setText("");
-                flag = 0;
-              ban = (ban + 1) % 2;
+                ban = (ban + 1) % 2;
             }
+              flag = 0;
           }
 
         }
@@ -132,7 +176,11 @@ public class MainActivity extends ActionBarActivity {
   }
   public boolean isDiag(int x0, int y0, int x1, int y1){
     for (int i = 0; i < 5;i++){
-      if((x0+i==x1 && y0+i==y1) || (x0+i==x1 &&y0-i == y1 ) || (x0-i==x1 &&y0-i == y1 ) || (x0-i==x1 &&y0+i == y1 ) ){
+      if((x0+i==x1 && y0+i==y1) || (x0+i==x1 &&y0-i == y1 ) ||
+         (x0-i==x1 &&y0-i == y1 ) || (x0-i==x1 &&y0+i == y1 ) ||
+         (x0==x1 &&y0-i == y1 ) || (x0==x1 &&y0+i == y1 ) ||
+              (x0-i==x1 &&y0 == y1 ) || (x0+i==x1 &&y0 == y1 )
+              ){
         return true;
       }
     }
