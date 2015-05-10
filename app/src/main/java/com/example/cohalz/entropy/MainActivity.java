@@ -1,8 +1,11 @@
 package com.example.cohalz.entropy;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.PaintDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +14,15 @@ import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity {
 
+  int flag = 0;
+  String ps[] = new String[2];
+  int pastx,pasty;
+  //String p2 = "#ff57ff6a";
+  //String p = p1;
+  int ban = 0;
+  String white = "#ffffff";
   TextView view[][] = new TextView[5][5];
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -43,15 +54,59 @@ public class MainActivity extends ActionBarActivity {
     view [4][4] = (TextView)findViewById(R.id.textView24);
   }
   public void onClick(View v) {
-    for (int y = 0; y < 5;y++){
-      for(int x = 0; x < 5;x++){
+
+    ps[0] = "#ff48fffd";
+    ps[1] = "#ff57ff6a";
+    for (int y = 0; y < 5; y++) {
+      for (int x = 0; x < 5; x++) {
         if (v == view[y][x]) {
-          view[y][x].setBackgroundColor(Color.parseColor("#FF0F00C0"));
+          ColorDrawable col = (ColorDrawable) v.getBackground();
+
+          //Log.i("v",Integer.toString(Color.parseColor("#ffffff")));
+          if (flag == 0 && col.getColor() == Color.parseColor(ps[ban])) {
+            flag = 1;
+            int i = 1;
+            while (y - i >= 0 & x - i >= 0 && ((ColorDrawable) view[y - i][x - i].getBackground()).getColor() == Color.parseColor(white)) {
+              view[y - i][x - i].setText("aaa");
+              i++;
+            }
+            i = 1;
+            while (y + i < 5 && x + i < 5 && ((ColorDrawable) view[y + i][x + i].getBackground()).getColor() == Color.parseColor(white)) {
+              view[y + i][x + i].setText("aaa");
+              i++;
+            }
+            i = 1;
+            while (y - i >= 0 && x + i < 5 && ((ColorDrawable) view[y - i][x + i].getBackground()).getColor() == Color.parseColor(white)) {
+              view[y - i][x + i].setText("aaa");
+              i++;
+            }
+            i = 1;
+            while (y + i < 5 && x - i >= 0 && ((ColorDrawable) view[y + i][x - i].getBackground()).getColor() == Color.parseColor(white)) {
+              view[y + i][x - i].setText("aaa");
+              i++;
+            }
+            pastx = x;
+            pasty = y;
+          }
+          else if (flag == 1 && col.getColor() == Color.parseColor(white)) {
+            flag = 0;
+            view[pasty][pasty].setBackgroundColor(Color.parseColor(white));
+            view[y][x].setBackgroundColor(Color.parseColor(ps[ban]));
+            view[y][x].setText("aaaa");
+            ban = (ban + 1) % 2;
+
+          }
         }
       }
     }
   }
-
+  public void flush() {
+    for(int i = 0;i < 5;i++){
+      for(int j = 0; j < 5; j++){
+        view[i][j].setText("");
+      }
+    }
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
