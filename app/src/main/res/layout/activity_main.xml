@@ -10,7 +10,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:weightSum="1">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -266,6 +267,7 @@
                 android:onClick="onClick"
                 android:gravity="center" />
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

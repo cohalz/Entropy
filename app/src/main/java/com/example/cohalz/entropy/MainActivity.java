@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
         if (v == view[y][x]) {
           ColorDrawable col = (ColorDrawable) v.getBackground();
 
-          //Log.i("v",Integer.toString(Color.parseColor("#ffffff")));
+          Log.i("v","x:"+x+", y:"+y);
           if (flag == 0 && col.getColor() == Color.parseColor(ps[ban])) {
             flag = 1;
             int i = 1;
@@ -88,40 +88,41 @@ public class MainActivity extends ActionBarActivity {
             pasty = y;
           }
           else if (flag == 1 && col.getColor() == Color.parseColor(white)) {
-            flag = 0;
-            view[pasty][pasty].setBackgroundColor(Color.parseColor(white));
-            view[y][x].setBackgroundColor(Color.parseColor(ps[ban]));
-            view[y][x].setText("");
-            ban = (ban + 1) % 2;
+
               int i = 1;
+              int count = 0;
             while (pasty - i >= 0 & pastx - i >= 0) {
                   view[pasty - i][pastx - i].setText("");
                   i++;
+                count++;
               }
               i = 1;
               while (pasty + i < 5 && pastx + i < 5){
                   view[pasty + i][pastx + i].setText("");
                   i++;
+                  count++;
               }
               i = 1;
               while (pasty - i >= 0 && pastx + i < 5){
                   view[pasty - i][pastx + i].setText("");
                   i++;
+                  count++;
               }
               i = 1;
               while (pasty + i < 5 && pastx - i >= 0){
                   view[pasty + i][pastx - i].setText("");
                   i++;
+                  count++;
               }
+              flag = 0;
+              if(count > 0){
+                  view[pasty][pastx].setBackgroundColor(Color.parseColor(white));
+                  view[y][x].setBackgroundColor(Color.parseColor(ps[ban]));
+              }
+              view[y][x].setText("");
+              ban = (ban + 1) % 2;
           }
         }
-      }
-    }
-  }
-  public void flush() {
-    for(int i = 0;i < 5;i++){
-      for(int j = 0; j < 5; j++){
-        view[i][j].setText("");
       }
     }
   }
