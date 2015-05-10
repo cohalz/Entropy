@@ -54,32 +54,6 @@ public class MainActivity extends ActionBarActivity {
     view [4][4] = (TextView)findViewById(R.id.textView24);
   }
   public void onClick(View v) {
-
-    view [0][0] = (TextView)findViewById(R.id.textView0);
-    view [0][1] = (TextView)findViewById(R.id.textView1);
-    view [0][2] = (TextView)findViewById(R.id.textView2);
-    view [0][3] = (TextView)findViewById(R.id.textView3);
-    view [0][4] = (TextView)findViewById(R.id.textView4);
-    view [1][0] = (TextView)findViewById(R.id.textView5);
-    view [1][1] = (TextView)findViewById(R.id.textView6);
-    view [1][2] = (TextView)findViewById(R.id.textView7);
-    view [1][3] = (TextView)findViewById(R.id.textView8);
-    view [1][4] = (TextView)findViewById(R.id.textView9);
-    view [2][0] = (TextView)findViewById(R.id.textView10);
-    view [2][1] = (TextView)findViewById(R.id.textView11);
-    view [2][2] = (TextView)findViewById(R.id.textView12);
-    view [2][3] = (TextView)findViewById(R.id.textView13);
-    view [2][4] = (TextView)findViewById(R.id.textView14);
-    view [3][1] = (TextView)findViewById(R.id.textView15);
-    view [3][1] = (TextView)findViewById(R.id.textView16);
-    view [3][2] = (TextView)findViewById(R.id.textView17);
-    view [3][3] = (TextView)findViewById(R.id.textView18);
-    view [3][4] = (TextView)findViewById(R.id.textView19);
-    view [4][0] = (TextView)findViewById(R.id.textView20);
-    view [4][1] = (TextView)findViewById(R.id.textView21);
-    view [4][2] = (TextView)findViewById(R.id.textView22);
-    view [4][3] = (TextView)findViewById(R.id.textView23);
-    view [4][4] = (TextView)findViewById(R.id.textView24);
     ps[0] = "#ff48fffd";
     ps[1] = "#ff57ff6a";
     for (int y = 0; y < 5; y++) {
