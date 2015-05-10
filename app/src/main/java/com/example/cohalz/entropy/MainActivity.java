@@ -17,6 +17,7 @@ public class MainActivity extends ActionBarActivity {
   int flag = 0;
   String ps[] = new String[2];
   int pastx,pasty;
+  String gray = "#eeeeee";
   //String p2 = "#ff57ff6a";
   //String p = p1;
   int ban = 0;
@@ -56,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
   public void onClick(View v) {
     ps[0] = "#ff48fffd";
     ps[1] = "#ff57ff6a";
+
     for (int y = 0; y < 5; y++) {
       for (int x = 0; x < 5; x++) {
         if (v == view[y][x]) {
@@ -66,108 +68,75 @@ public class MainActivity extends ActionBarActivity {
             int count = 0;
             int i = 1;
             while (y - i >= 0 & x - i >= 0 && ((ColorDrawable) view[y - i][x - i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y - i][x - i].setText("test");
+              view[y - i][x - i].setBackgroundColor(Color.parseColor(gray));
               i++;
-                count++;
+              count++;
             }
             i = 1;
             while (y + i < 5 && x + i < 5 && ((ColorDrawable) view[y + i][x + i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y + i][x + i].setText("test");
+              view[y + i][x + i].setBackgroundColor(Color.parseColor(gray));
               i++;
-                count++;
+              count++;
             }
             i = 1;
             while (y - i >= 0 && x + i < 5 && ((ColorDrawable) view[y - i][x + i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y - i][x + i].setText("test");
+              view[y - i][x + i].setBackgroundColor(Color.parseColor(gray));
               i++;
-                count++;
+              count++;
             }
             i = 1;
             while (y + i < 5 && x - i >= 0 && ((ColorDrawable) view[y + i][x - i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y + i][x - i].setText("test");
+              view[y + i][x - i].setBackgroundColor(Color.parseColor(gray));
               i++;
-                count++;
+              count++;
             }
-              i = 1;
-              while (y + i < 5 && ((ColorDrawable) view[y + i][x].getBackground()).getColor() == Color.parseColor(white)) {
-                  view[y + i][x].setText("test");
-                  i++;
-                  count++;
-              }
-              i = 1;
-              while (y - i >= 0 && ((ColorDrawable) view[y - i][x].getBackground()).getColor() == Color.parseColor(white)) {
-                  view[y - i][x].setText("test");
-                  i++;
-                  count++;
-              }
-              i = 1;
-              while (x - i >= 0 && ((ColorDrawable) view[y][x - i].getBackground()).getColor() == Color.parseColor(white)) {
-                  view[y][x - i].setText("test");
-                  i++;
-                  count++;
-              }
-              i = 1;
-              while (x + i < 5 && ((ColorDrawable) view[y][x + i].getBackground()).getColor() == Color.parseColor(white)) {
-                  view[y][x + i].setText("test");
-                  i++;
-                  count++;
-              }
-              if(count > 0){
-                  flag = 1;
-                  pastx = x;
-                  pasty = y;
+            i = 1;
+            while (y + i < 5 && ((ColorDrawable) view[y + i][x].getBackground()).getColor() == Color.parseColor(white)) {
+              view[y + i][x].setBackgroundColor(Color.parseColor(gray));
+              i++;
+              count++;
+            }
+            i = 1;
+            while (y - i >= 0 && ((ColorDrawable) view[y - i][x].getBackground()).getColor() == Color.parseColor(white)) {
+              view[y - i][x].setBackgroundColor(Color.parseColor(gray));
+              i++;
+              count++;
+            }
+            i = 1;
+            while (x - i >= 0 && ((ColorDrawable) view[y][x - i].getBackground()).getColor() == Color.parseColor(white)) {
+              view[y][x - i].setBackgroundColor(Color.parseColor(gray));
+              i++;
+              count++;
+            }
+            i = 1;
+            while (x + i < 5 && ((ColorDrawable) view[y][x + i].getBackground()).getColor() == Color.parseColor(white)) {
+              view[y][x + i].setBackgroundColor(Color.parseColor(gray));
+              i++;
+              count++;
+            }
+            if(count > 0){
+              flag = 1;
+              pastx = x;
+              pasty = y;
 
-              }
+            }
           }
           else if (flag == 1) {
 
-            int i = 1;
-            while (pasty - i >= 0 & pastx - i >= 0) {
-              view[pasty - i][pastx - i].setText("");
-              i++;
-            }
-            i = 1;
-            while (pasty + i < 5 && pastx + i < 5){
-              view[pasty + i][pastx + i].setText("");
-              i++;
-            }
-            i = 1;
-            while (pasty - i >= 0 && pastx + i < 5){
-              view[pasty - i][pastx + i].setText("");
-              i++;
-            }
-            i = 1;
-            while (pasty + i < 5 && pastx - i >= 0){
-              view[pasty + i][pastx - i].setText("");
-              i++;
-            }
-             i = 1;
-              while (pasty - i >= 0) {
-                  view[pasty - i][pastx].setText("");
-                  i++;
+            for (int i = 0;i < 5 ;i++ ) {
+              for(int j = 0; j < 5; j++){
+                if(((ColorDrawable) view[i][j].getBackground()).getColor() == Color.parseColor(gray))
+                  view[i][j].setBackgroundColor(Color.parseColor(white));
               }
-              i = 1;
-              while (pasty + i < 5){
-                  view[pasty + i][pastx].setText("");
-                  i++;
-              }
-              i = 1;
-              while (pastx + i < 5){
-                  view[pasty][pastx + i].setText("");
-                  i++;
-              }
-              i = 1;
-              while (pastx - i >= 0){
-                  view[pasty][pastx - i].setText("");
-                  i++;
-              }
+
+            }
+
             if(isDiag(pastx,pasty,x,y) && col.getColor() == Color.parseColor(white)){
-                view[pasty][pastx].setBackgroundColor(Color.parseColor(white));
-                view[y][x].setBackgroundColor(Color.parseColor(ps[ban]));
-              view[y][x].setText("");
-                ban = (ban + 1) % 2;
+              view[pasty][pastx].setBackgroundColor(Color.parseColor(white));
+              view[y][x].setBackgroundColor(Color.parseColor(ps[ban]));
+              ban = (ban + 1) % 2;
             }
-              flag = 0;
+            flag = 0;
           }
 
         }
@@ -177,12 +146,12 @@ public class MainActivity extends ActionBarActivity {
   public boolean isDiag(int x0, int y0, int x1, int y1){
     for (int i = 0; i < 5;i++){
       if((x0+i==x1 && y0+i==y1) || (x0+i==x1 &&y0-i == y1 ) ||
-         (x0-i==x1 &&y0-i == y1 ) || (x0-i==x1 &&y0+i == y1 ) ||
-         (x0==x1 &&y0-i == y1 ) || (x0==x1 &&y0+i == y1 ) ||
-              (x0-i==x1 &&y0 == y1 ) || (x0+i==x1 &&y0 == y1 )
-              ){
+          (x0-i==x1 &&y0-i == y1 ) || (x0-i==x1 &&y0+i == y1 ) ||
+          (x0==x1 &&y0-i == y1 ) || (x0==x1 &&y0+i == y1 ) ||
+          (x0-i==x1 &&y0 == y1 ) || (x0+i==x1 &&y0 == y1 )
+        ){
         return true;
-      }
+        }
     }
     return false;
   }
