@@ -64,63 +64,65 @@ public class MainActivity extends ActionBarActivity {
           ColorDrawable col = (ColorDrawable) view[y][x].getBackground();
 
           Log.i("v","x:"+x+", y:"+y);
-          if (flag == 0 && col.getColor() == Color.parseColor(ps[ban])) {
-            int count = 0;
-            int i = 1;
-            while (y - i >= 0 & x - i >= 0 && ((ColorDrawable) view[y - i][x - i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y - i][x - i].setBackgroundColor(Color.parseColor(gray));
-              i++;
-              count++;
-            }
-            i = 1;
-            while (y + i < 5 && x + i < 5 && ((ColorDrawable) view[y + i][x + i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y + i][x + i].setBackgroundColor(Color.parseColor(gray));
-              i++;
-              count++;
-            }
-            i = 1;
-            while (y - i >= 0 && x + i < 5 && ((ColorDrawable) view[y - i][x + i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y - i][x + i].setBackgroundColor(Color.parseColor(gray));
-              i++;
-              count++;
-            }
-            i = 1;
-            while (y + i < 5 && x - i >= 0 && ((ColorDrawable) view[y + i][x - i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y + i][x - i].setBackgroundColor(Color.parseColor(gray));
-              i++;
-              count++;
-            }
-            i = 1;
-            while (y + i < 5 && ((ColorDrawable) view[y + i][x].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y + i][x].setBackgroundColor(Color.parseColor(gray));
-              i++;
-              count++;
-            }
-            i = 1;
-            while (y - i >= 0 && ((ColorDrawable) view[y - i][x].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y - i][x].setBackgroundColor(Color.parseColor(gray));
-              i++;
-              count++;
-            }
-            i = 1;
-            while (x - i >= 0 && ((ColorDrawable) view[y][x - i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y][x - i].setBackgroundColor(Color.parseColor(gray));
-              i++;
-              count++;
-            }
-            i = 1;
-            while (x + i < 5 && ((ColorDrawable) view[y][x + i].getBackground()).getColor() == Color.parseColor(white)) {
-              view[y][x + i].setBackgroundColor(Color.parseColor(gray));
-              i++;
-              count++;
-            }
-            if(count > 0){
-              flag = 1;
-              pastx = x;
-              pasty = y;
+                if (flag == 0 && col.getColor() == Color.parseColor(ps[ban])) {
+                    if(isTouched(x,y,col.getColor())) {
+                    int count = 0;
+                    int i = 1;
+                    while (y - i >= 0 & x - i >= 0 && ((ColorDrawable) view[y - i][x - i].getBackground()).getColor() == Color.parseColor(white)) {
+                        view[y - i][x - i].setBackgroundColor(Color.parseColor(gray));
+                        i++;
+                        count++;
+                    }
+                    i = 1;
+                    while (y + i < 5 && x + i < 5 && ((ColorDrawable) view[y + i][x + i].getBackground()).getColor() == Color.parseColor(white)) {
+                        view[y + i][x + i].setBackgroundColor(Color.parseColor(gray));
+                        i++;
+                        count++;
+                    }
+                    i = 1;
+                    while (y - i >= 0 && x + i < 5 && ((ColorDrawable) view[y - i][x + i].getBackground()).getColor() == Color.parseColor(white)) {
+                        view[y - i][x + i].setBackgroundColor(Color.parseColor(gray));
+                        i++;
+                        count++;
+                    }
+                    i = 1;
+                    while (y + i < 5 && x - i >= 0 && ((ColorDrawable) view[y + i][x - i].getBackground()).getColor() == Color.parseColor(white)) {
+                        view[y + i][x - i].setBackgroundColor(Color.parseColor(gray));
+                        i++;
+                        count++;
+                    }
+                    i = 1;
+                    while (y + i < 5 && ((ColorDrawable) view[y + i][x].getBackground()).getColor() == Color.parseColor(white)) {
+                        view[y + i][x].setBackgroundColor(Color.parseColor(gray));
+                        i++;
+                        count++;
+                    }
+                    i = 1;
+                    while (y - i >= 0 && ((ColorDrawable) view[y - i][x].getBackground()).getColor() == Color.parseColor(white)) {
+                        view[y - i][x].setBackgroundColor(Color.parseColor(gray));
+                        i++;
+                        count++;
+                    }
+                    i = 1;
+                    while (x - i >= 0 && ((ColorDrawable) view[y][x - i].getBackground()).getColor() == Color.parseColor(white)) {
+                        view[y][x - i].setBackgroundColor(Color.parseColor(gray));
+                        i++;
+                        count++;
+                    }
+                    i = 1;
+                    while (x + i < 5 && ((ColorDrawable) view[y][x + i].getBackground()).getColor() == Color.parseColor(white)) {
+                        view[y][x + i].setBackgroundColor(Color.parseColor(gray));
+                        i++;
+                        count++;
+                    }
+                    if (count > 0) {
+                        flag = 1;
+                        pastx = x;
+                        pasty = y;
 
+                    }
+                }
             }
-          }
           else if (flag == 1) {
 
             for (int i = 0;i < 5 ;i++ ) {
@@ -154,6 +156,34 @@ public class MainActivity extends ActionBarActivity {
         }
     }
     return false;
+  }
+
+  public boolean isTouched(int x,int y,int color){
+      if(y > 0) {
+          if(((ColorDrawable) view[y-1][x].getBackground()).getColor() == color) return true;
+          if(x > 0){
+              if(((ColorDrawable) view[y-1][x-1].getBackground()).getColor() == color) return true;
+          }
+          if(x < 4){
+              if(((ColorDrawable) view[y-1][x+1].getBackground()).getColor() == color) return true;
+          }
+      }
+    if(y < 4) {
+          if(((ColorDrawable) view[y+1][x].getBackground()).getColor() == color) return true;
+          if(x > 0){
+              if(((ColorDrawable) view[y+1][x-1].getBackground()).getColor() == color) return true;
+          }
+          if(x < 4){
+              if(((ColorDrawable) view[y+1][x+1].getBackground()).getColor() == color) return true;
+          }
+      }
+      if(x > 0){
+          if(((ColorDrawable) view[y][x-1].getBackground()).getColor() == color) return true;
+      }
+      if(x < 4){
+          if(((ColorDrawable) view[y][x+1].getBackground()).getColor() == color) return true;
+      }
+      return false;
   }
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
