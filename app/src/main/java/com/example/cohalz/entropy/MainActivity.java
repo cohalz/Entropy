@@ -23,7 +23,8 @@ public class MainActivity extends ActionBarActivity {
   int ban = 1;
   String white = "#ffffff";
   TextView view[][] = new TextView[5][5];
-  int board[][] = new int[5][5];
+  int board[][] = new int[5][5]; //盤面を記憶する
+    //1が1P,0が白,-1が2P,2が移動可能マス
 
 
   @Override
