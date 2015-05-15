@@ -126,46 +126,24 @@ public class MainActivity extends ActionBarActivity {
             }
           } else if (flag == 1) {
 
+            if (board[y][x] == 2) {
+              board[pasty][pastx] = 0;
+              board[y][x] = ban;
+              ban = ban * -1;
+            }
+
             for (int i = 0; i < 5; i++) {
               for (int j = 0; j < 5; j++) {
                 if (board[i][j] == 2)
                   board[i][j] = 0;
               }
-
-            }
-            int prev[] = {pastx,pasty};
-            int point[] = {x,y};
-            if (isDiag(prev, point) && board[y][x] == 0) {
-              board[pasty][pastx] = 0;
-              board[y][x] = ban;
-              ban = ban * -1;
             }
             flag = 0;
           }
-
         }
       }
     }
     display();
-  }
-
-    // 前押した場所から今押した場所が移動可能か判定する
-    // 飛び越えられるのですぐ改善します
-  public boolean isDiag(int prev[], int point[]) {
-    for (int i = 0; i < 5; i++) {
-      if ((prev[0] + i == point[0] && prev[1] + i == point[1]) ||
-          (prev[0] + i == point[0] && prev[1] - i == point[1]) ||
-          (prev[0] - i == point[0] && prev[1] - i == point[1]) ||
-          (prev[0] - i == point[0] && prev[1] + i == point[1]) ||
-          (prev[0] == point[0] && prev[1] - i == prev[1]) ||
-          (prev[0] == point[0] && prev[1] + i == point[1]) ||
-          (prev[0] - i == point[0] && prev[1] == point[1]) ||
-          (prev[0] + i == point[0] && prev[1] == point[1])
-         ) {
-        return true;
-         }
-    }
-    return false;
   }
 
   public boolean isTouched(int x, int y, int ban) {
