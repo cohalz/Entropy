@@ -75,8 +75,12 @@ public class MainActivity extends ActionBarActivity {
                 pastx = x;
                 pasty = y;
 //aaaaa
+
                   ///おおおおおおo
                   //yfigigu
+
+                  ///おおおおおお
+                  //あｆｓｆせｇくぇｇ
               }
             }
           } else if (flag == 1) {
