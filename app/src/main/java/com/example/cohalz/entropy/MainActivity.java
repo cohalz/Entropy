@@ -68,56 +68,8 @@ public class MainActivity extends ActionBarActivity {
           Log.i("v", "x:" + x + ", y:" + y);
           if (flag == 0 && board[y][x] == ban) {
             if (isTouched(x, y, ban)) {
-              int count = 0;
-              int i = 1;
-              while (y - i >= 0 & x - i >= 0 && board[y - i][x - i] == 0) {
-                board[y - i][x - i] = 2;
-                i++;
-                count++;
-              }
-              i = 1;
-              while (y + i < 5 && x + i < 5 && board[y + i][x + i] == 0) {
-                board[y + i][x + i] = 2;
-                i++;
-                count++;
-              }
-              i = 1;
-              while (y - i >= 0 && x + i < 5 && board[y - i][x + i] == 0) {
-                board[y - i][x + i] = 2;
-                i++;
-                count++;
-              }
-              i = 1;
-              while (y + i < 5 && x - i >= 0 && board[y + i][x - i] == 0) {
-                board[y + i][x - i] = 2;
-                i++;
-                count++;
-              }
-              i = 1;
-              while (y + i < 5 && board[y + i][x] == 0) {
-                board[y + i][x] = 2;
-                i++;
-                count++;
-              }
-              i = 1;
-              while (y - i >= 0 && board[y - i][x] == 0) {
-                board[y - i][x] = 2;
-                i++;
-                count++;
-              }
-              i = 1;
-              while (x - i >= 0 && board[y][x - i] == 0) {
-                board[y][x - i] = 2;
-                i++;
-                count++;
-              }
-              i = 1;
-              while (x + i < 5 && board[y][x + i] == 0) {
-                board[y][x + i] = 2;
-                i++;
-                count++;
-              }
-              if (count > 0) {
+
+              if (movable(x,y) > 0) {
                 flag = 1;
                 pastx = x;
                 pasty = y;
@@ -144,6 +96,61 @@ public class MainActivity extends ActionBarActivity {
       }
     }
     display();
+  }
+
+  //引数の地点からどこに移動できるかのフラグを作成する
+  //戻り値は移動できる場所の数
+  public int movable(int x, int y) {
+      int count = 0;
+      int i = 1;
+      while (y - i >= 0 & x - i >= 0 && board[y - i][x - i] == 0) {
+          board[y - i][x - i] = 2;
+          i++;
+          count++;
+      }
+      i = 1;
+      while (y + i < 5 && x + i < 5 && board[y + i][x + i] == 0) {
+          board[y + i][x + i] = 2;
+          i++;
+          count++;
+      }
+      i = 1;
+      while (y - i >= 0 && x + i < 5 && board[y - i][x + i] == 0) {
+          board[y - i][x + i] = 2;
+          i++;
+          count++;
+      }
+      i = 1;
+      while (y + i < 5 && x - i >= 0 && board[y + i][x - i] == 0) {
+          board[y + i][x - i] = 2;
+          i++;
+          count++;
+      }
+      i = 1;
+      while (y + i < 5 && board[y + i][x] == 0) {
+          board[y + i][x] = 2;
+          i++;
+          count++;
+      }
+      i = 1;
+      while (y - i >= 0 && board[y - i][x] == 0) {
+          board[y - i][x] = 2;
+          i++;
+          count++;
+      }
+      i = 1;
+      while (x - i >= 0 && board[y][x - i] == 0) {
+          board[y][x - i] = 2;
+          i++;
+          count++;
+      }
+      i = 1;
+      while (x + i < 5 && board[y][x + i] == 0) {
+          board[y][x + i] = 2;
+          i++;
+          count++;
+      }
+      return count;
   }
 
   public boolean isTouched(int x, int y, int ban) {
