@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
   int board[][] = new int[5][5]; //盤面を記憶する
     //1が1P,0が白,-1が2P,2が移動可能マス
 
-
+//42hi42fgh2f4i2hp
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
