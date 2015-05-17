@@ -23,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
   int ban = 1;
   String white = "#ffffff";
   TextView view[][] = new TextView[5][5];
+    TextView status;
   int board[][] = new int[5][5]; //盤面を記憶する
     //1が1P,0が白,-1が2P,2が移動可能マス
 
@@ -58,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
     view[4][2] = (TextView) findViewById(R.id.textView22);
     view[4][3] = (TextView) findViewById(R.id.textView23);
     view[4][4] = (TextView) findViewById(R.id.textView24);
+    status = (TextView) findViewById(R.id.status);
     toBoard();
   }
 
@@ -74,9 +76,6 @@ public class MainActivity extends ActionBarActivity {
                 flag = 1;
                 pastx = x;
                 pasty = y;
-//aaaaa
-                  ///おおおおおお
-                  //あｆｓｆせｇくぇｇｑ
               }
             }
           } else if (flag == 1) {
@@ -84,7 +83,13 @@ public class MainActivity extends ActionBarActivity {
             if (board[y][x] == 2) {
               board[pasty][pastx] = 0;
               board[y][x] = ban;
+                if(isClear()) status.setText(ban + "Clear!");
               ban = ban * -1;
+              if(isPass()) ban = ban * -1;
+              else if(ban == -1)
+                  status.setText("2P");
+              else
+                  status.setText("1P");
             }
 
             for (int i = 0; i < 5; i++) {
@@ -99,6 +104,7 @@ public class MainActivity extends ActionBarActivity {
       }
     }
     display();
+
   }
 
   //引数の地点からどこに移動できるかのフラグを作成する
@@ -155,6 +161,35 @@ public class MainActivity extends ActionBarActivity {
       }
       return count;
   }
+
+  public boolean isPass(){
+      int count = 0;
+      for (int y = 0; y < 5; y++) {
+          for (int x = 0; x < 5; x++) {
+              if(board[y][x] == ban)
+              count += movable(x,y);
+          }
+      }
+      if(count == 0) return true;
+      else return false;
+  }
+
+  public boolean isAlone(int x,int y){
+      return !isTouched(x,y,1) && !isTouched(x,y,-1);
+  }
+
+  public boolean isClear(){
+      for (int y = 0; y < 5; y++) {
+          for (int x = 0; x < 5; x++) {
+            if(board[y][x] == ban){
+                if(isTouched(x,y,ban)) return false;
+                if(!isTouched(x,y,ban*-1)) return false;
+            }
+          }
+      }
+      return true;
+  }
+
 
   public boolean isTouched(int x, int y, int ban) {
     if (y > 0) {

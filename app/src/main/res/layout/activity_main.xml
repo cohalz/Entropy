@@ -269,6 +269,19 @@
                 android:clickable="true"
                 android:onClick="onClick"
                 android:gravity="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1P"
+                android:id="@+id/status" />
         </LinearLayout>
 
     </LinearLayout>
