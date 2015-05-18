@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity {
           } else if (flag == 1) {
 
             if (board[y][x] == 2) {
-                board[pasty][pastx] = 0;
+                board[pasty][pastx] = -1;
                 board[y][x] = ban;
                 if (isClear()) {
                     status.setText(Integer.toString(ban+1) + "Win!");
@@ -97,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
                         if (board[i][j] == 2)
-                            board[i][j] = 0;
+                            board[i][j] = -1;
                     }
                 }
                 flag = 0;
