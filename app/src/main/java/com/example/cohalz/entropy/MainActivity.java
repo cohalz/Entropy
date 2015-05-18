@@ -20,12 +20,12 @@ public class MainActivity extends ActionBarActivity {
   String gray = "#eeeeee";
   //String p2 = "#ff57ff6a";
   //String p = p1;
-  int ban = 1;
+  int ban = 0;
   String white = "#ffffff";
   TextView view[][] = new TextView[5][5];
     TextView status;
   int board[][] = new int[5][5]; //盤面を記憶する
-    //1が1P,0が白,-1が2P,2が移動可能マス
+    //0が1P,-1が白,1が2P,2が移動可能マス
 
 
   @Override
@@ -81,24 +81,27 @@ public class MainActivity extends ActionBarActivity {
           } else if (flag == 1) {
 
             if (board[y][x] == 2) {
-              board[pasty][pastx] = 0;
-              board[y][x] = ban;
-                if(isClear()) status.setText(ban + "Clear!");
-              ban = ban * -1;
-              if(isPass()) ban = ban * -1;
-              else if(ban == -1)
-                  status.setText("2P");
-              else
-                  status.setText("1P");
-            }
+                board[pasty][pastx] = 0;
+                board[y][x] = ban;
+                if (isClear()) {
+                    status.setText(Integer.toString(ban+1) + "Win!");
+                } else {
+                    ban = (ban + 1) % 2;
+                    if (isPass()) ban = (ban + 1) % 2;
+                    else if (ban == 1)
+                        status.setText("2P");
+                    else
+                        status.setText("1P");
+                }
 
-            for (int i = 0; i < 5; i++) {
-              for (int j = 0; j < 5; j++) {
-                if (board[i][j] == 2)
-                  board[i][j] = 0;
-              }
+                for (int i = 0; i < 5; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        if (board[i][j] == 2)
+                            board[i][j] = 0;
+                    }
+                }
+                flag = 0;
             }
-            flag = 0;
           }
         }
       }
@@ -106,55 +109,56 @@ public class MainActivity extends ActionBarActivity {
     display();
 
   }
+ // 画面回転でリセットしちゃうのでなんとかする
 
   //引数の地点からどこに移動できるかのフラグを作成する
   //戻り値は移動できる場所の数
   public int movable(int x, int y) {
       int count = 0;
       int i = 1;
-      while (y - i >= 0 & x - i >= 0 && board[y - i][x - i] == 0) {
+      while (y - i >= 0 & x - i >= 0 && board[y - i][x - i] == -1) {
           board[y - i][x - i] = 2;
           i++;
           count++;
       }
       i = 1;
-      while (y + i < 5 && x + i < 5 && board[y + i][x + i] == 0) {
+      while (y + i < 5 && x + i < 5 && board[y + i][x + i] == -1) {
           board[y + i][x + i] = 2;
           i++;
           count++;
       }
       i = 1;
-      while (y - i >= 0 && x + i < 5 && board[y - i][x + i] == 0) {
+      while (y - i >= 0 && x + i < 5 && board[y - i][x + i] == -1) {
           board[y - i][x + i] = 2;
           i++;
           count++;
       }
       i = 1;
-      while (y + i < 5 && x - i >= 0 && board[y + i][x - i] == 0) {
+      while (y + i < 5 && x - i >= 0 && board[y + i][x - i] == -1) {
           board[y + i][x - i] = 2;
           i++;
           count++;
       }
       i = 1;
-      while (y + i < 5 && board[y + i][x] == 0) {
+      while (y + i < 5 && board[y + i][x] == -1) {
           board[y + i][x] = 2;
           i++;
           count++;
       }
       i = 1;
-      while (y - i >= 0 && board[y - i][x] == 0) {
+      while (y - i >= 0 && board[y - i][x] == -1) {
           board[y - i][x] = 2;
           i++;
           count++;
       }
       i = 1;
-      while (x - i >= 0 && board[y][x - i] == 0) {
+      while (x - i >= 0 && board[y][x - i] == -1) {
           board[y][x - i] = 2;
           i++;
           count++;
       }
       i = 1;
-      while (x + i < 5 && board[y][x + i] == 0) {
+      while (x + i < 5 && board[y][x + i] == -1) {
           board[y][x + i] = 2;
           i++;
           count++;
@@ -167,11 +171,10 @@ public class MainActivity extends ActionBarActivity {
       for (int y = 0; y < 5; y++) {
           for (int x = 0; x < 5; x++) {
               if(board[y][x] == ban)
-              count += movable(x,y);
+              count += movable(x, y);
           }
       }
-      if(count == 0) return true;
-      else return false;
+      return count == 0;
   }
 
   public boolean isAlone(int x,int y){
@@ -222,9 +225,9 @@ public class MainActivity extends ActionBarActivity {
   public void display() {
     for (int i = 0; i < 5; i++) {
       for (int j = 0; j < 5; j++) {
-        if (board[i][j] == 1) view[i][j].setBackgroundColor(Color.parseColor(ps[0]));
-        else if (board[i][j] == -1) view[i][j].setBackgroundColor(Color.parseColor(ps[1]));
-        else if (board[i][j] == 0) view[i][j].setBackgroundColor(Color.parseColor(white));
+        if (board[i][j] == 0) view[i][j].setBackgroundColor(Color.parseColor(ps[0]));
+        else if (board[i][j] == 1) view[i][j].setBackgroundColor(Color.parseColor(ps[1]));
+        else if (board[i][j] == -1) view[i][j].setBackgroundColor(Color.parseColor(white));
         else if (board[i][j] == 2) view[i][j].setBackgroundColor(Color.parseColor(gray));
       }
     }
@@ -234,9 +237,9 @@ public class MainActivity extends ActionBarActivity {
     for (int i = 0; i < 5; i++) {
       for (int j = 0; j < 5; j++) {
         int  color = ((ColorDrawable) view[i][j].getBackground()).getColor();
-        if (color == Color.parseColor(ps[0])) board[i][j] = 1 ;
-        if (color == Color.parseColor(ps[1])) board[i][j] = -1;
-        if (color == Color.parseColor(white)) board[i][j] = 0 ;
+        if (color == Color.parseColor(ps[0])) board[i][j] = 0 ;
+        if (color == Color.parseColor(ps[1])) board[i][j] = 1;
+        if (color == Color.parseColor(white)) board[i][j] = -1 ;
         if (color == Color.parseColor(gray))  board[i][j] = 2;
       }
     }
