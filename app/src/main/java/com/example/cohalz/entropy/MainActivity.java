@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
     TextView status;
   int board[][] = new int[5][5]; //盤面を記憶する
     //0が1P,-1が白,1が2P,2が移動可能マス
-
+//aaa
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
