@@ -1,5 +1,8 @@
 package com.example.cohalz.entropy;
 
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,11 +12,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
-    private Bt mBt = new Bt(this);
+
 
     int flag = 0;
     String ps[] = new String[2];
@@ -26,7 +32,12 @@ public class MainActivity extends ActionBarActivity {
     TextView view[][] = new TextView[5][5];
     int board[][] = new int[5][5]; //盤面を記憶する
     //1が1P,0が白,-1が2P,2が移動可能マス
+    private BluetoothAdapter mBtAdapter;
     private TextView mResultView;
+    private ArrayAdapter<String> mServers;
+    private ArrayAdapter<String> mCandidateServers;
+    private Bt mBt  = new Bt(this, mCandidateServers, mServers);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +71,17 @@ public class MainActivity extends ActionBarActivity {
         view[4][3] = (TextView) findViewById(R.id.textView23);
         view[4][4] = (TextView) findViewById(R.id.textView24);
         toBoard();
+
+        mResultView = (TextView)findViewById(R.id.bt_text);
+        // インテントフィルタの作成
+        //IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        // ブロードキャストレシーバの登録
+        //registerReceiver(mBt.mReceiver, filter);
+        mServers = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        mCandidateServers = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+
+
+
     }
 
 
@@ -237,7 +259,53 @@ public class MainActivity extends ActionBarActivity {
             mBt.startDiscoverable();
             return true;
         }else if (id == R.id.menu_start_server) {
-            //Bt.startServer();
+            mBt.startServer();
+        }else if (id == R.id.menu_search_server) {
+            //mCandidateServers.clear();
+            ListView lv = new ListView(this);
+            lv.setAdapter(mCandidateServers);
+            lv.setScrollingCacheEnabled(false);
+            final AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.title_dialog)
+                    .setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mBt.cancelDiscovery();
+                        }
+                    })
+                    .setView(lv)
+                    .create();
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> items, View view, int position, long id) {
+                    dialog.dismiss();
+                    String address = mCandidateServers.getItem(position);
+                    if (mServers.getPosition(address) == -1) {
+                        mServers.add(address);
+                    }
+                    mBt.cancelDiscovery();
+                }
+            });
+            dialog.show();
+            mBt.searchServer();
+        }else if(id == R.id.menu_connect){
+            ListView lv = new ListView(this);
+            final AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.title_dialog)
+                    .setPositiveButton(android.R.string.cancel, null)
+                    .setView(lv)
+                    .create();
+            lv.setAdapter(mServers);
+            lv.setScrollingCacheEnabled(false);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> items, View view, int position, long id) {
+                    dialog.dismiss();
+                    String address = mServers.getItem(position);
+                    mBt.connect(address);
+                }
+            });
+            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);
