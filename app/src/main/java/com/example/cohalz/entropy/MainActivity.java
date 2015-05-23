@@ -89,12 +89,14 @@ public class MainActivity extends ActionBarActivity {
                                 flag = 2;
                                 movableShowReset();
                                 status.setText(Integer.toString(ban + 1) + "P Win!");
+                                display();
                                 return;
                             } else if(isClear(1)){
                                 ban = 1;
                                 flag = 2;
                                 movableShowReset();
                                 status.setText(Integer.toString(ban + 1) + "P Win!");
+                                display();
                                 return;
 
                             } else {
