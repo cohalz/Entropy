@@ -290,6 +290,9 @@ public class MainActivity extends ActionBarActivity {
                     alonexlist.add(x);
                     aloneylist.add(y);
                     aaa(x, y,board[y][x]);
+                    //最初は普通に色塗る
+                    //二回目以降は色が塗ってあるところの数字を増やしてそれ以外はリセット
+                    //数字を元に戻すのを繰り返す
                 }
             }
         }
