@@ -289,8 +289,8 @@ public class MainActivity extends ActionBarActivity {
                 if (isAlone(x, y)) {
                     alonexlist.add(x);
                     aloneylist.add(y);
+                    aaa(x, y,board[y][x]);
                 }
-                //aaa(x, y,board[y][x]);
             }
         }
     }
