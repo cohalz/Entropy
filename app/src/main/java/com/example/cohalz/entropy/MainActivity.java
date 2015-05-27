@@ -289,12 +289,25 @@ public class MainActivity extends ActionBarActivity {
                 if (isAlone(x, y)) {
                     alonexlist.add(x);
                     aloneylist.add(y);
-                    aaa(x, y,board[y][x]);
+                    //aaa(x, y,board[y][x]);
                     //最初は普通に色塗る
                     //二回目以降は色が塗ってあるところの数字を増やしてそれ以外はリセット
                     //数字を元に戻すのを繰り返す
                 }
             }
+
+        }
+        for(int i= 0; i < alonexlist.size();i++){
+            int x = alonexlist.getFirst();
+            int y = aloneylist.getFirst();
+            if(i == 0){
+                aaa(x, y,board[y][x]);
+
+            } else {
+                bbb(x,y,board[y][x]);
+            }
+            alonexlist.remove();
+            aloneylist.remove();
         }
     }
 
@@ -379,6 +392,47 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    public void bbb(int x, int y, int ban) {
+        if (y > 0) {
+            if (board[y - 1][x] == 3 + ban) board[y - 1][x] += 2;
+            if (x > 0) {
+                if (board[y - 1][x - 1] == 3 + ban) board[y - 1][x - 1] += 2;
+            }
+            if (x < 4) {
+                if (board[y - 1][x + 1] == 3 + ban) board[y - 1][x + 1] += 2;
+            }
+        }
+        if (y < 4) {
+            if (board[y + 1][x] == 3 + ban) board[y + 1][x] += 2;
+            if (x > 0) {
+                if (board[y + 1][x - 1] == 3 + ban) board[y + 1][x - 1] += 2;
+            }
+            if (x < 4) {
+                if (board[y + 1][x + 1] == 3 + ban) board[y + 1][x + 1] += 2;
+            }
+        }
+        if (x > 0) {
+            if (board[y][x - 1] == 3 + ban) board[y][x - 1] += 2;
+        }
+        if (x < 4) {
+            if (board[y][x + 1] == 3 + ban) board[y][x + 1] += 2;
+        }
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if(board[i][j] == 3 + ban) board[i][j] = -1;
+                if(board[i][j] == 3 + ban + 2) board[i][j] -= 2;
+            }
+        }
+
+    }
+
+    public void countDown() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (board[i][j] > 4) board[i][j] -= 2;
+            }
+        }
+    }
 
     public void display() {
         for (int i = 0; i < 5; i++) {
