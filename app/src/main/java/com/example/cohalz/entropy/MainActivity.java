@@ -90,20 +90,11 @@ public class MainActivity extends ActionBarActivity {
                         if (board[y][x] == 2) {
                             board[pasty][pastx] = -1;
                             board[y][x] = ban;
-                            if (isClear(0)) {
-                                // status.setText(Integer.toString(ban + 1) + "Win!");
-                                ban = 0;
-                                flag = 2;
-                                movableShowReset();
-                                status.setText(Integer.toString(ban + 1) + "P Win!");
-                                display();
+                            if (isClear(ban)) {
+                                clear(ban);
                                 return;
-                            } else if (isClear(1)) {
-                                ban = 1;
-                                flag = 2;
-                                movableShowReset();
-                                status.setText(Integer.toString(ban + 1) + "P Win!");
-                                display();
+                            } else if (isClear((ban + 1) % 2)) {
+                                clear((ban + 1) % 2);
                                 return;
 
                             } else {
@@ -132,7 +123,6 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         }
-        //if(alone()) nanka();
         display();
 
     }
@@ -142,123 +132,43 @@ public class MainActivity extends ActionBarActivity {
     //戻り値は移動できる場所の数
     public int movable(int x, int y) {
         int count = 0;
-        int i = 1;
-        if (alone()) {
-            nanka();
-            while (y - i >= 0 & x - i >= 0 && (board[y - i][x - i] != 0 && board[y - i][x - i] != 1)) {
-                if (board[y - i][x - i] == ban + 3) {
-                    board[y - i][x - i] = 2;
-                }
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y + i < 5 && x + i < 5 && (board[y + i][x + i] != 0 && board[y + i][x + i] != 1)) {
-                if (board[y + i][x + i] == ban + 3) {
-                    board[y + i][x + i] = 2;
-                }
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y - i >= 0 && x + i < 5 && (board[y - i][x + i] != 0 && board[y - i][x + i] != 1)) {
-                if (board[y - i][x + i] == ban + 3) {
-                    board[y - i][x + i] = 2;
-                }
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y + i < 5 && x - i >= 0 && (board[y + i][x - i] != 0 && board[y + i][x - i] != 1)) {
-                if (board[y + i][x - i] == ban + 3) {
-                    board[y + i][x - i] = 2;
-                }
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y + i < 5 && (board[y + i][x] != 0 && board[y + i][x] != 1)) {
-                if (board[y + i][x] == ban + 3) {
-                    board[y + i][x] = 2;
-                }
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y - i >= 0 && (board[y - i][x] != 0 && board[y - i][x] != 1)) {
-                if (board[y - i][x] == ban + 3) {
-                    board[y - i][x] = 2;
-                }
-                i++;
-                count++;
-            }
-            i = 1;
-            while (x - i >= 0 && (board[y][x - i] != 0 && board[y][x - i] != 1)) {
-                if (board[y][x - i] == ban + 3) {
-                    board[y][x - i] = 2;
-                }
-                i++;
-                count++;
-            }
-            i = 1;
-            while (x + i < 5 && (board[y][x + i] != 0 && board[y][x + i] != 1)) {
-                if (board[y][x + i] == ban + 3) {
-                    board[y][x + i] = 2;
-                }
-                i++;
-                count++;
-            }
-            return count;
-        } else {
-            while (y - i >= 0 & x - i >= 0 && (board[y - i][x - i] != 0 && board[y - i][x - i] != 1)) {
-                board[y - i][x - i] = 2;
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y + i < 5 && x + i < 5 && (board[y + i][x + i] != 0 && board[y + i][x + i] != 1)) {
-                board[y + i][x + i] = 2;
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y - i >= 0 && x + i < 5 && (board[y - i][x + i] != 0 && board[y - i][x + i] != 1)) {
-                board[y - i][x + i] = 2;
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y + i < 5 && x - i >= 0 && (board[y + i][x - i] != 0 && board[y + i][x - i] != 1)) {
-                board[y + i][x - i] = 2;
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y + i < 5 && (board[y + i][x] != 0 && board[y + i][x] != 1)) {
-                board[y + i][x] = 2;
-                i++;
-                count++;
-            }
-            i = 1;
-            while (y - i >= 0 && (board[y - i][x] != 0 && board[y - i][x] != 1)) {
-                board[y - i][x] = 2;
-                i++;
-                count++;
-            }
-            i = 1;
-            while (x - i >= 0 && (board[y][x - i] != 0 && board[y][x - i] != 1)) {
-                board[y][x - i] = 2;
-                i++;
-                count++;
-            }
-            i = 1;
-            while (x + i < 5 && (board[y][x + i] != 0 && board[y][x + i] != 1)) {
-                board[y][x + i] = 2;
-                i++;
-                count++;
-            }
-            return count;
+        int flag = 0;
+        if (isContainsAlone()) {
+            createAloneFlag();
+            flag = 1;
         }
+        count += countVec(x, y, flag, 1, 1);
+        count += countVec(x, y, flag, 1, 0);
+        count += countVec(x, y, flag, 1, -1);
+        count += countVec(x, y, flag, 0, 1);
+        count += countVec(x, y, flag, 0, -1);
+        count += countVec(x, y, flag, -1, 1);
+        count += countVec(x, y, flag, -1, 0);
+        count += countVec(x, y, flag, -1, -1);
+        return count;
+    }
+
+    //x,y座標と向きを指定して動ける場所を色変える
+    //戻り値は動ける場所の数
+    public int countVec(int x, int y, int flag, int xVec, int yVec) {
+        int xi = x + xVec;
+        int yi = y + yVec;
+        int count = 0;
+        while (xi < 5 && xi >= 0 && yi < 5 && yi >= 0 && board[yi][xi] != 0 && board[yi][xi] != 1) {
+            if (flag == 1) {
+                if (board[yi][xi] == ban + 3)
+                    board[yi][xi] = 2;
+                yi += yVec;
+                xi += xVec;
+                count++;
+            } else {
+                board[yi][xi] = 2;
+                yi += yVec;
+                xi += xVec;
+                count++;
+            }
+        }
+        return count;
     }
 
     public boolean isPass() {
@@ -283,13 +193,12 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public void nanka() {
+    public void createAloneFlag() {
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 if (isAlone(x, y)) {
                     alonexlist.add(x);
                     aloneylist.add(y);
-                    //aaa(x, y,board[y][x]);
                     //最初は普通に色塗る
                     //二回目以降は色が塗ってあるところの数字を増やしてそれ以外はリセット
                     //数字を元に戻すのを繰り返す
@@ -297,25 +206,31 @@ public class MainActivity extends ActionBarActivity {
             }
 
         }
-        for(int i= 0; i < alonexlist.size();i++){
-            int x = alonexlist.getFirst();
-            int y = aloneylist.getFirst();
-            if(i == 0){
-                aaa(x, y,board[y][x]);
+        for (int i = 0; i < alonexlist.size(); i++) {
+            int x = alonexlist.remove();
+            int y = aloneylist.remove();
+            if (i == 0) {
+                changeAroundColor(x, y, -1, ban + 3);
 
             } else {
-                bbb(x,y,board[y][x]);
+                changeAroundColor(x, y, 3 + ban, 5 + ban);
+                countDown();
             }
-            alonexlist.remove();
-            aloneylist.remove();
         }
+    }
+
+    public void clear(int ban) {
+        flag = 2;
+        movableShowReset();
+        status.setText(Integer.toString(ban + 1) + "P Win!");
+        display();
     }
 
     public boolean isAlone(int x, int y) {
         return !isTouched(x, y, 1) && !isTouched(x, y, 0);
     }
 
-    public boolean alone() {
+    public boolean isContainsAlone() {
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 if (isAlone(x, y) && board[y][x] == ban) return true;
@@ -365,71 +280,39 @@ public class MainActivity extends ActionBarActivity {
         return false;
     }
 
-    public void aaa(int x, int y, int ban) {
+    public void changeAroundColor(int x, int y, int from, int to) {
         if (y > 0) {
-            if (board[y - 1][x] == -1) board[y - 1][x] = ban + 3;
+            if (board[y - 1][x] == from) board[y - 1][x] = to;
             if (x > 0) {
-                if (board[y - 1][x - 1] == -1) board[y - 1][x - 1] = ban + 3;
+                if (board[y - 1][x - 1] == from) board[y - 1][x - 1] = to;
             }
             if (x < 4) {
-                if (board[y - 1][x + 1] == -1) board[y - 1][x + 1] = ban + 3;
+                if (board[y - 1][x + 1] == from) board[y - 1][x + 1] = to;
             }
         }
         if (y < 4) {
-            if (board[y + 1][x] == -1) board[y + 1][x] = ban + 3;
+            if (board[y + 1][x] == from) board[y + 1][x] = to;
             if (x > 0) {
-                if (board[y + 1][x - 1] == -1) board[y + 1][x - 1] = ban + 3;
+                if (board[y + 1][x - 1] == from) board[y + 1][x - 1] = to;
             }
             if (x < 4) {
-                if (board[y + 1][x + 1] == -1) board[y + 1][x + 1] = ban + 3;
+                if (board[y + 1][x + 1] == from) board[y + 1][x + 1] = to;
             }
         }
         if (x > 0) {
-            if (board[y][x - 1] == -1) board[y][x - 1] = ban + 3;
+            if (board[y][x - 1] == from) board[y][x - 1] = to;
         }
         if (x < 4) {
-            if (board[y][x + 1] == -1) board[y][x + 1] = ban + 3;
+            if (board[y][x + 1] == from) board[y][x + 1] = to;
         }
-    }
-
-    public void bbb(int x, int y, int ban) {
-        if (y > 0) {
-            if (board[y - 1][x] == 3 + ban) board[y - 1][x] += 2;
-            if (x > 0) {
-                if (board[y - 1][x - 1] == 3 + ban) board[y - 1][x - 1] += 2;
-            }
-            if (x < 4) {
-                if (board[y - 1][x + 1] == 3 + ban) board[y - 1][x + 1] += 2;
-            }
-        }
-        if (y < 4) {
-            if (board[y + 1][x] == 3 + ban) board[y + 1][x] += 2;
-            if (x > 0) {
-                if (board[y + 1][x - 1] == 3 + ban) board[y + 1][x - 1] += 2;
-            }
-            if (x < 4) {
-                if (board[y + 1][x + 1] == 3 + ban) board[y + 1][x + 1] += 2;
-            }
-        }
-        if (x > 0) {
-            if (board[y][x - 1] == 3 + ban) board[y][x - 1] += 2;
-        }
-        if (x < 4) {
-            if (board[y][x + 1] == 3 + ban) board[y][x + 1] += 2;
-        }
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                if(board[i][j] == 3 + ban) board[i][j] = -1;
-                if(board[i][j] == 3 + ban + 2) board[i][j] -= 2;
-            }
-        }
-
     }
 
     public void countDown() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board[i][j] > 4) board[i][j] -= 2;
+                if (board[i][j] == 3 + ban) board[i][j] = -1;
+                if (board[i][j] == 3 + ban + 2) board[i][j] -= 2;
+
             }
         }
     }
