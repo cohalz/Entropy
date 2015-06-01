@@ -17,6 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
 
 public class BluetoothActivity extends ActionBarActivity {
 
@@ -30,6 +32,7 @@ public class BluetoothActivity extends ActionBarActivity {
     int ban = 1;
     String white = "#ffffff";
     TextView view[][] = new TextView[5][5];
+    TextView status;
     int board[][] = new int[5][5]; //盤面を記憶する
     //1が1P,0が白,-1が2P,2が移動可能マス
     //private BluetoothAdapter mBtAdapter;
@@ -39,14 +42,21 @@ public class BluetoothActivity extends ActionBarActivity {
     private View mView;
     private final Handler mHandler = new Handler();
     private Bt mBt;
+    LinkedList<Integer> alonexlist;
+    LinkedList<Integer> aloneylist;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        status = (TextView) findViewById(R.id.status);
+
         setContentView(R.layout.activity_bluetooth);
         ps[0] = "#ff48fffd";
         ps[1] = "#ff57ff6a";
+        alonexlist = new LinkedList<Integer>();
+        aloneylist = new LinkedList<Integer>();
+
         view[0][0] = (TextView) findViewById(R.id.textView0);
         view[0][1] = (TextView) findViewById(R.id.textView1);
         view[0][2] = (TextView) findViewById(R.id.textView2);
@@ -104,93 +114,182 @@ public class BluetoothActivity extends ActionBarActivity {
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 if (v == view[y][x]) {
-                    Log.i("v", "x:" + x + ", y:" + y);
+                    Log.i("v", "x:" + x + ", y:" + y + ", flag:" + flag);
                     if (flag == 0 && board[y][x] == ban) {
                         if (isTouched(x, y, ban)) {
 
-                            if (movable(x,y) > 0) {
+                            if (movable(x, y) > 0) {
                                 flag = 1;
                                 pastx = x;
                                 pasty = y;
-
                             }
                         }
                     } else if (flag == 1) {
-
+                        aloneClear();
                         if (board[y][x] == 2) {
-                            board[pasty][pastx] = 0;
+                            board[pasty][pastx] = -1;
                             board[y][x] = ban;
-                            ban = ban * -1;
-                        }
+                            if (isClear(ban)) {
+                                clear(ban);
+                                return;
+                            } else if (isClear((ban + 1) % 2)) {
+                                clear((ban + 1) % 2);
+                                return;
 
-                        for (int i = 0; i < 5; i++) {
-                            for (int j = 0; j < 5; j++) {
-                                if (board[i][j] == 2)
-                                    board[i][j] = 0;
+                            } else {
+                                ban = (ban + 1) % 2;
+                                if (isPass()) ban = (ban + 1) % 2;
+                                if (isPass()) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
+                                    movableShowReset();
+                                    status.setText("draw");
+                                    flag = 3;
+                                } else if (ban == 1)
+                                    status.setText("2P");
+                                else
+                                    status.setText("1P");
                             }
                         }
+                        movableShowReset();
                         flag = 0;
+
+                    } else if (flag == 2) {
+                        movableShowReset();
+                        status.setText(Integer.toString(ban + 1) + "P Win!");
+                    } else if (flag == 3) {
+                        movableShowReset();
+                        status.setText("draw");
                     }
                 }
             }
         }
         display();
+
     }
+    // 画面回転でリセットしちゃうのでなんとかする
 
     //引数の地点からどこに移動できるかのフラグを作成する
     //戻り値は移動できる場所の数
     public int movable(int x, int y) {
         int count = 0;
-        int i = 1;
-        while (y - i >= 0 & x - i >= 0 && board[y - i][x - i] == 0) {
-            board[y - i][x - i] = 2;
-            i++;
-            count++;
+        int flag = 0;
+        if (isContainsAlone()) {
+            createAloneFlag();
+            flag = 1;
         }
-        i = 1;
-        while (y + i < 5 && x + i < 5 && board[y + i][x + i] == 0) {
-            board[y + i][x + i] = 2;
-            i++;
-            count++;
-        }
-        i = 1;
-        while (y - i >= 0 && x + i < 5 && board[y - i][x + i] == 0) {
-            board[y - i][x + i] = 2;
-            i++;
-            count++;
-        }
-        i = 1;
-        while (y + i < 5 && x - i >= 0 && board[y + i][x - i] == 0) {
-            board[y + i][x - i] = 2;
-            i++;
-            count++;
-        }
-        i = 1;
-        while (y + i < 5 && board[y + i][x] == 0) {
-            board[y + i][x] = 2;
-            i++;
-            count++;
-        }
-        i = 1;
-        while (y - i >= 0 && board[y - i][x] == 0) {
-            board[y - i][x] = 2;
-            i++;
-            count++;
-        }
-        i = 1;
-        while (x - i >= 0 && board[y][x - i] == 0) {
-            board[y][x - i] = 2;
-            i++;
-            count++;
-        }
-        i = 1;
-        while (x + i < 5 && board[y][x + i] == 0) {
-            board[y][x + i] = 2;
-            i++;
-            count++;
+        count += countVec(x, y, flag, 1, 1);
+        count += countVec(x, y, flag, 1, 0);
+        count += countVec(x, y, flag, 1, -1);
+        count += countVec(x, y, flag, 0, 1);
+        count += countVec(x, y, flag, 0, -1);
+        count += countVec(x, y, flag, -1, 1);
+        count += countVec(x, y, flag, -1, 0);
+        count += countVec(x, y, flag, -1, -1);
+        return count;
+    }
+
+    //x,y座標と向きを指定して動ける場所を色変える
+    //戻り値は動ける場所の数
+    public int countVec(int x, int y, int flag, int xVec, int yVec) {
+        int xi = x + xVec;
+        int yi = y + yVec;
+        int count = 0;
+        while (xi < 5 && xi >= 0 && yi < 5 && yi >= 0 && board[yi][xi] != 0 && board[yi][xi] != 1) {
+            if (flag == 1) {
+                if (board[yi][xi] == ban + 3)
+                    board[yi][xi] = 2;
+                yi += yVec;
+                xi += xVec;
+                count++;
+            } else {
+                board[yi][xi] = 2;
+                yi += yVec;
+                xi += xVec;
+                count++;
+            }
         }
         return count;
     }
+
+    public boolean isPass() {
+        int count = 0;
+        for (int y = 0; y < 5; y++) {
+            for (int x = 0; x < 5; x++) {
+                if (board[y][x] == ban)
+                    if (isTouched(x, y, ban))
+                        count += movable(x, y);
+            }
+        }
+        movableShowReset();
+        return count == 0;
+    }
+
+    public void movableShowReset() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (board[i][j] >= 2)
+                    board[i][j] = -1;
+            }
+        }
+    }
+
+    public void createAloneFlag() {
+        for (int y = 0; y < 5; y++) {
+            for (int x = 0; x < 5; x++) {
+                if (isAlone(x, y)) {
+                    alonexlist.add(x);
+                    aloneylist.add(y);
+                    //最初は普通に色塗る
+                    //二回目以降は色が塗ってあるところの数字を増やしてそれ以外はリセット
+                    //数字を元に戻すのを繰り返す
+                }
+            }
+
+        }
+        for (int i = 0; i < alonexlist.size(); i++) {
+            int x = alonexlist.remove();
+            int y = aloneylist.remove();
+            if (i == 0) {
+                changeAroundColor(x, y, -1, ban + 3);
+
+            } else {
+                changeAroundColor(x, y, 3 + ban, 5 + ban);
+                countDown();
+            }
+        }
+    }
+
+    public void clear(int ban) {
+        flag = 2;
+        movableShowReset();
+        status.setText(Integer.toString(ban + 1) + "P Win!");
+        display();
+    }
+
+    public boolean isAlone(int x, int y) {
+        return !isTouched(x, y, 1) && !isTouched(x, y, 0);
+    }
+
+    public boolean isContainsAlone() {
+        for (int y = 0; y < 5; y++) {
+            for (int x = 0; x < 5; x++) {
+                if (isAlone(x, y) && board[y][x] == ban) return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isClear(int ban) {
+        for (int y = 0; y < 5; y++) {
+            for (int x = 0; x < 5; x++) {
+                if (board[y][x] == ban) {
+                    if (isTouched(x, y, ban)) return false;
+                    if (!isTouched(x, y, (ban + 1) % 2)) return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     public boolean isTouched(int x, int y, int ban) {
         if (y > 0) {
@@ -220,13 +319,58 @@ public class BluetoothActivity extends ActionBarActivity {
         return false;
     }
 
+    public void changeAroundColor(int x, int y, int from, int to) {
+        if (y > 0) {
+            if (board[y - 1][x] == from) board[y - 1][x] = to;
+            if (x > 0) {
+                if (board[y - 1][x - 1] == from) board[y - 1][x - 1] = to;
+            }
+            if (x < 4) {
+                if (board[y - 1][x + 1] == from) board[y - 1][x + 1] = to;
+            }
+        }
+        if (y < 4) {
+            if (board[y + 1][x] == from) board[y + 1][x] = to;
+            if (x > 0) {
+                if (board[y + 1][x - 1] == from) board[y + 1][x - 1] = to;
+            }
+            if (x < 4) {
+                if (board[y + 1][x + 1] == from) board[y + 1][x + 1] = to;
+            }
+        }
+        if (x > 0) {
+            if (board[y][x - 1] == from) board[y][x - 1] = to;
+        }
+        if (x < 4) {
+            if (board[y][x + 1] == from) board[y][x + 1] = to;
+        }
+    }
+
+    public void countDown() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (board[i][j] == 3 + ban) board[i][j] = -1;
+                if (board[i][j] == 3 + ban + 2) board[i][j] -= 2;
+
+            }
+        }
+    }
+
     public void display() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board[i][j] == 1) view[i][j].setBackgroundColor(Color.parseColor(ps[0]));
-                else if (board[i][j] == -1) view[i][j].setBackgroundColor(Color.parseColor(ps[1]));
-                else if (board[i][j] == 0) view[i][j].setBackgroundColor(Color.parseColor(white));
+                if (board[i][j] == 0) view[i][j].setBackgroundColor(Color.parseColor(ps[0]));
+                else if (board[i][j] == 1) view[i][j].setBackgroundColor(Color.parseColor(ps[1]));
+                else if (board[i][j] == -1) view[i][j].setBackgroundColor(Color.parseColor(white));
                 else if (board[i][j] == 2) view[i][j].setBackgroundColor(Color.parseColor(gray));
+            }
+        }
+    }
+
+    public void aloneClear() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (board[i][j] >= 3) board[i][j] = 2;
             }
         }
     }
@@ -234,19 +378,21 @@ public class BluetoothActivity extends ActionBarActivity {
     public void toBoard() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                int  color = ((ColorDrawable) view[i][j].getBackground()).getColor();
-                if (color == Color.parseColor(ps[0])) board[i][j] = 1 ;
-                if (color == Color.parseColor(ps[1])) board[i][j] = -1;
-                if (color == Color.parseColor(white)) board[i][j] = 0 ;
-                if (color == Color.parseColor(gray))  board[i][j] = 2;
+                int color = ((ColorDrawable) view[i][j].getBackground()).getColor();
+                if (color == Color.parseColor(ps[0])) board[i][j] = 0;
+                if (color == Color.parseColor(ps[1])) board[i][j] = 1;
+                if (color == Color.parseColor(white)) board[i][j] = -1;
+                if (color == Color.parseColor(gray)) board[i][j] = 2;
             }
         }
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
