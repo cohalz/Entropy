@@ -29,7 +29,7 @@ public class StartMenu extends ActionBarActivity {
             startActivity(intent);
         }
         if(v == bluetooth){
-            Intent intent = new Intent(this, Normal.class);
+            Intent intent = new Intent(this, Bt.class);
             startActivity(intent);
         }
     }
