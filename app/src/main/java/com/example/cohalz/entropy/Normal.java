@@ -36,7 +36,7 @@ public class Normal extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_normal);
         alonexlist = new LinkedList<Integer>();
         aloneylist = new LinkedList<Integer>();
         ps[0] = "#ff48fffd";

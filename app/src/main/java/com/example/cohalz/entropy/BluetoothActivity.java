@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-public class MainActivity extends ActionBarActivity {
+public class BluetoothActivity extends ActionBarActivity {
 
 
     int flag = 0;
@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_bluetooth);
         ps[0] = "#ff48fffd";
         ps[1] = "#ff57ff6a";
         view[0][0] = (TextView) findViewById(R.id.textView0);

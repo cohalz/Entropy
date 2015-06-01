@@ -120,7 +120,7 @@ public class Bt {
     private final static int REQUEST_ENABLE_BLUETOOTH = 1;
     private static final int REQUEST_DISCOVERABLE_BT = 5678;
     private static final int DURATION = 300;
-    private final MainActivity activity;
+    private final BluetoothActivity activity;
     //BluetoothAdapter取得
     BluetoothAdapter Bt = BluetoothAdapter.getDefaultAdapter();
     BluetoothDevice BtDevice = null;
@@ -150,7 +150,7 @@ public class Bt {
             }
         }
     };
-    public Bt(MainActivity context, ArrayAdapter<String> candidateServers, ArrayAdapter<String> servers) {
+    public Bt(BluetoothActivity context, ArrayAdapter<String> candidateServers, ArrayAdapter<String> servers) {
         activity = context;
         mCandidateServers = candidateServers;
         Set<BluetoothDevice> devices = Bt.getBondedDevices();
