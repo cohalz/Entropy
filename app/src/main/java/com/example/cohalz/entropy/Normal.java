@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.LinkedList;
 
 
-public class MainActivity extends ActionBarActivity {
+public class Normal extends ActionBarActivity {
 
     int flag = 0;
     LinkedList<Integer> alonexlist;
@@ -100,7 +100,7 @@ public class MainActivity extends ActionBarActivity {
                             } else {
                                 ban = (ban + 1) % 2;
                                 if (isPass()) ban = (ban + 1) % 2;
-                                if (isPass()) {
+                                if (isPass()) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
                                     movableShowReset();
                                     status.setText("draw");
                                     flag = 3;
