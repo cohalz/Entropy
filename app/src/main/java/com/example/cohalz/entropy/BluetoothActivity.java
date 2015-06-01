@@ -20,7 +20,7 @@ import android.widget.TextView;
 import java.util.LinkedList;
 
 
-public class BluetoothActivity extends ActionBarActivity {
+public class BluetoothActivity extends Normal {
 
     //1が1P,0が白,-1が2P,2が移動可能マス
     //private BluetoothAdapter mBtAdapter;
