@@ -1,12 +1,12 @@
 package com.example.cohalz.entropy;
 
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -32,11 +32,13 @@ public class MainActivity extends ActionBarActivity {
     TextView view[][] = new TextView[5][5];
     int board[][] = new int[5][5]; //盤面を記憶する
     //1が1P,0が白,-1が2P,2が移動可能マス
-    private BluetoothAdapter mBtAdapter;
+    //private BluetoothAdapter mBtAdapter;
     private TextView mResultView;
     private ArrayAdapter<String> mServers;
     private ArrayAdapter<String> mCandidateServers;
-    private Bt mBt  = new Bt(this, mCandidateServers, mServers);
+    private View mView;
+    private final Handler mHandler = new Handler();
+    private Bt mBt;
 
 
     @Override
@@ -79,9 +81,7 @@ public class MainActivity extends ActionBarActivity {
         //registerReceiver(mBt.mReceiver, filter);
         mServers = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         mCandidateServers = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-
-
-
+        mBt  = new Bt(this, mCandidateServers, mServers);
     }
 
 
@@ -93,9 +93,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mBt.onActivityResult(requestCode, resultCode, data);
+    protected void onPause() {
+        super.onPause();
+        mBt.cancel();
     }
+
+
     public void onClick(View v) {
 
         for (int y = 0; y < 5; y++) {
@@ -261,7 +264,7 @@ public class MainActivity extends ActionBarActivity {
         }else if (id == R.id.menu_start_server) {
             mBt.startServer();
         }else if (id == R.id.menu_search_server) {
-            //mCandidateServers.clear();
+            mCandidateServers.clear();
             ListView lv = new ListView(this);
             lv.setAdapter(mCandidateServers);
             lv.setScrollingCacheEnabled(false);
@@ -307,8 +310,21 @@ public class MainActivity extends ActionBarActivity {
             });
             dialog.show();
         }
+        return true;
+        //return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mBt.onActivityResult(requestCode, resultCode, data);
+    }
 
-        return super.onOptionsItemSelected(item);
+    public void invalidate() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mView.invalidate();
+            }
+        });
     }
 
 }

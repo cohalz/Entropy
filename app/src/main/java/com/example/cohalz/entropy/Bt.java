@@ -33,7 +33,7 @@ public class Bt {
         }
 
         protected void loop() throws IOException {
-            //activity.invalidate();
+            activity.invalidate();
             BufferedReader br = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
             String message;
             while ((message = br.readLine()) != null) {
@@ -73,6 +73,43 @@ public class Bt {
         private void cancel() {
             try {
                 mServerSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private class ClientThread extends ReceiverThread {
+        private final BluetoothDevice mServer;
+
+        private ClientThread(String address) {
+            mServer = Bt.getRemoteDevice(address);
+            try {
+                mSocket = mServer.createRfcommSocketToServiceRecord(APP_UUID);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        @Override
+        public void run() {
+            // connect() の前にデバイス検出をやめる必要がある
+            Bt.cancelDiscovery();
+            try {
+                // サーバに接続する
+                mSocket.connect();
+                //mBoard = new Board(Board.COLOR_BLACK);
+                loop();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                cancel();
+            }
+
+        }
+
+        private void cancel() {
+            //mBoard = null;
+            try {
+                mSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -122,9 +159,6 @@ public class Bt {
         }
     }
 
-    //public Bt(MainActivity activity) {
-      //  this.activity = activity;
-    //}
 
     protected void turnOn() {
         boolean btEnable = Bt.isEnabled();
@@ -155,6 +189,9 @@ public class Bt {
         activity.startActivityForResult(intent, REQUEST_DISCOVERABLE_BT);
     }
 
+    public void cancelDiscovery() {
+        Bt.cancelDiscovery();
+    }
     public void startServer() {
         if (mServerThread != null) {
             mServerThread.cancel();
@@ -171,50 +208,6 @@ public class Bt {
         activity.registerReceiver(mReceiver, filter);
         Bt.startDiscovery();
     }
-
-
-    private class ClientThread extends ReceiverThread {
-        private final BluetoothDevice mServer;
-
-        private ClientThread(String address) {
-            mServer = Bt.getRemoteDevice(address);
-            try {
-                mSocket = mServer.createRfcommSocketToServiceRecord(APP_UUID);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        @Override
-        public void run() {
-            // connect() の前にデバイス検出をやめる必要がある
-            Bt.cancelDiscovery();
-            try {
-                // サーバに接続する
-                mSocket.connect();
-                //mBoard = new Board(Board.COLOR_BLACK);
-                loop();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                cancel();
-            }
-
-        }
-
-        public void cancel() {
-            if (mServerThread != null) {
-                mServerThread.cancel();
-                mServerThread = null;
-            }
-            if (mClientThread != null) {
-                mClientThread.cancel();
-                mClientThread = null;
-            }
-        }
-    }
-    public void cancelDiscovery() {
-        Bt.cancelDiscovery();
-    }
     public void connect(String address) {
         int index;
         if ((index = address.indexOf("\n")) != -1) {
@@ -224,4 +217,30 @@ public class Bt {
         mClientThread = new ClientThread(address);
         mClientThread.start();
     }
+
+    public void sendMessage(String message) {
+        try {
+            if (mServerThread != null) {
+                mServerThread.sendMessage(message);
+            }
+            if (mClientThread != null) {
+                mClientThread.sendMessage(message);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void cancel() {
+        if (mServerThread != null) {
+            mServerThread.cancel();
+            mServerThread = null;
+        }
+        if (mClientThread != null) {
+            mClientThread.cancel();
+            mClientThread = null;
+        }
+    }
+
+
+
 }
