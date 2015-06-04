@@ -29,14 +29,13 @@ public class BluetoothActivity extends ActionBarActivity {
     String gray = "#eeeeee";
     //String p2 = "#ff57ff6a";
     //String p = p1;
-    int ban = 1;
+    int ban = 0;
     String white = "#ffffff";
     TextView view[][] = new TextView[5][5];
     TextView status;
     int board[][] = new int[5][5]; //盤面を記憶する
     //1が1P,0が白,-1が2P,2が移動可能マス
     //private BluetoothAdapter mBtAdapter;
-    private TextView mResultView;
     private ArrayAdapter<String> mServers;
     private ArrayAdapter<String> mCandidateServers;
     private View mView;
@@ -49,7 +48,7 @@ public class BluetoothActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        status = (TextView) findViewById(R.id.status);
+
 
         setContentView(R.layout.activity_bluetooth);
         ps[0] = "#ff48fffd";
@@ -82,9 +81,10 @@ public class BluetoothActivity extends ActionBarActivity {
         view[4][2] = (TextView) findViewById(R.id.textView22);
         view[4][3] = (TextView) findViewById(R.id.textView23);
         view[4][4] = (TextView) findViewById(R.id.textView24);
+        status = (TextView) findViewById(R.id.status);
         toBoard();
 
-        mResultView = (TextView)findViewById(R.id.bt_text);
+        //mResultView = (TextView)findViewById(R.id.bt_text);
         // インテントフィルタの作成
         //IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         // ブロードキャストレシーバの登録
@@ -392,7 +392,7 @@ public class BluetoothActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
