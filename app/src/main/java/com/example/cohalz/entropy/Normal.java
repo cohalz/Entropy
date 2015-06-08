@@ -1,5 +1,6 @@
 package com.example.cohalz.entropy;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +15,10 @@ import java.util.LinkedList;
 public class Normal extends ActionBarActivity {
 
     int flag = 0;
+    int blank = -1;
+    int p1 = 0;
+    int p2 = 1;
+    int movable = 2;
     LinkedList<Integer> alonexlist;
     LinkedList<Integer> aloneylist;
     String ps[] = new String[2];
@@ -84,12 +89,14 @@ public class Normal extends ActionBarActivity {
                         }
                     } else if (flag == 1) {
                         aloneClear();
-                        if (board[y][x] == 2) {
-                            board[pasty][pastx] = -1;
+                        if (board[y][x] == movable) {
+                            board[pasty][pastx] = blank;
                             board[y][x] = ban;
-                            if (isClear(ban)) {
-                                clear(ban);
-                                return;
+                            if (isClear(0)) {
+                                Intent intent = new Intent(this, p1win.class);
+                                startActivity(intent);
+                               // clear(ban);
+                                //return;
                             } else if (isClear((ban + 1) % 2)) {
                                 clear((ban + 1) % 2);
                                 return;
@@ -151,15 +158,15 @@ public class Normal extends ActionBarActivity {
         int xi = x + xVec;
         int yi = y + yVec;
         int count = 0;
-        while (xi < 5 && xi >= 0 && yi < 5 && yi >= 0 && board[yi][xi] != 0 && board[yi][xi] != 1) {
+        while (xi < 5 && xi >= 0 && yi < 5 && yi >= 0 && board[yi][xi] != p1 && board[yi][xi] != p2) {
             if (flag == 1) {
                 if (board[yi][xi] == ban + 3)
-                    board[yi][xi] = 2;
+                    board[yi][xi] = movable;
                 yi += yVec;
                 xi += xVec;
                 count++;
             } else {
-                board[yi][xi] = 2;
+                board[yi][xi] = movable;
                 yi += yVec;
                 xi += xVec;
                 count++;
@@ -184,8 +191,8 @@ public class Normal extends ActionBarActivity {
     public void movableShowReset() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board[i][j] >= 2)
-                    board[i][j] = -1;
+                if (board[i][j] >= movable)
+                    board[i][j] = blank;
             }
         }
     }
@@ -224,7 +231,7 @@ public class Normal extends ActionBarActivity {
     }
 
     public boolean isAlone(int x, int y) {
-        return !isTouched(x, y, 1) && !isTouched(x, y, 0);
+        return !isTouched(x, y, p1) && !isTouched(x, y, p2);
     }
 
     public boolean isContainsAlone() {
@@ -307,7 +314,7 @@ public class Normal extends ActionBarActivity {
     public void countDown() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board[i][j] == 3 + ban) board[i][j] = -1;
+                if (board[i][j] == 3 + ban) board[i][j] = blank;
                 if (board[i][j] == 3 + ban + 2) board[i][j] -= 2;
 
             }
@@ -317,10 +324,10 @@ public class Normal extends ActionBarActivity {
     public void display() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board[i][j] == 0) view[i][j].setBackgroundColor(Color.parseColor(ps[0]));
-                else if (board[i][j] == 1) view[i][j].setBackgroundColor(Color.parseColor(ps[1]));
-                else if (board[i][j] == -1) view[i][j].setBackgroundColor(Color.parseColor(white));
-                else if (board[i][j] == 2) view[i][j].setBackgroundColor(Color.parseColor(gray));
+                if (board[i][j] == p1) view[i][j].setBackgroundColor(Color.parseColor(ps[0]));
+                else if (board[i][j] == p2) view[i][j].setBackgroundColor(Color.parseColor(ps[1]));
+                else if (board[i][j] == blank) view[i][j].setBackgroundColor(Color.parseColor(white));
+                else if (board[i][j] == movable) view[i][j].setBackgroundColor(Color.parseColor(gray));
             }
         }
     }
@@ -328,7 +335,7 @@ public class Normal extends ActionBarActivity {
     public void aloneClear() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board[i][j] >= 3) board[i][j] = 2;
+                if (board[i][j] >= 3) board[i][j] = movable;
             }
         }
     }
@@ -337,10 +344,10 @@ public class Normal extends ActionBarActivity {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 int color = ((ColorDrawable) view[i][j].getBackground()).getColor();
-                if (color == Color.parseColor(ps[0])) board[i][j] = 0;
-                if (color == Color.parseColor(ps[1])) board[i][j] = 1;
-                if (color == Color.parseColor(white)) board[i][j] = -1;
-                if (color == Color.parseColor(gray)) board[i][j] = 2;
+                if (color == Color.parseColor(ps[0])) board[i][j] = p1;
+                if (color == Color.parseColor(ps[1])) board[i][j] = p2;
+                if (color == Color.parseColor(white)) board[i][j] = blank;
+                if (color == Color.parseColor(gray)) board[i][j] = movable;
             }
         }
     }

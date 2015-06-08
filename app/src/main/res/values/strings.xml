@@ -11,4 +11,6 @@
     <string name="menu_search_server">Search server</string>
     <string name="menu_connect">Connect</string>
     <string name="title_dialog">Select device</string>
+    <string name="title_activity_p1win">p1win</string>
+    <string name="title_activity_vscpu">VSCPU</string>
 </resources>
