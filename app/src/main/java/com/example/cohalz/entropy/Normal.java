@@ -160,11 +160,12 @@ public class Normal extends ActionBarActivity {
         int count = 0;
         while (xi < 5 && xi >= 0 && yi < 5 && yi >= 0 && board[yi][xi] != p1 && board[yi][xi] != p2) {
             if (flag == 1) {
-                if (board[yi][xi] == ban + 3)
+                if (board[yi][xi] == ban + 3){
+                    count++;
                     board[yi][xi] = movable;
+                }
                 yi += yVec;
                 xi += xVec;
-                count++;
             } else {
                 board[yi][xi] = movable;
                 yi += yVec;
