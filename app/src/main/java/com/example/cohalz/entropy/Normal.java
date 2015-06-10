@@ -1,18 +1,22 @@
 package com.example.cohalz.entropy;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.LinkedList;
 
 
 public class Normal extends ActionBarActivity {
+
+    int p1image = R.drawable.blue;
+    int p2image = R.drawable.green;
+    int blankimage = R.drawable.white;
+    int movableimage = R.drawable.gray;
 
     int flag = 0;
     int blank = -1;
@@ -29,7 +33,7 @@ public class Normal extends ActionBarActivity {
     int ban = 0;
     String white = "#ffffff";
     String red = "#ff0000";
-    TextView view[][] = new TextView[5][5];
+    ImageView view[][] = new ImageView[5][5];
     TextView status;
     int board[][] = new int[5][5]; //盤面を記憶する
     //0が1P,-1が白,1が2P,2が移動可能マス
@@ -38,37 +42,40 @@ public class Normal extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("v", "a");
         setContentView(R.layout.activity_normal);
         alonexlist = new LinkedList<Integer>();
         aloneylist = new LinkedList<Integer>();
         ps[0] = "#ff48fffd";
         ps[1] = "#ff57ff6a";
-        view[0][0] = (TextView) findViewById(R.id.textView0);
-        view[0][1] = (TextView) findViewById(R.id.textView1);
-        view[0][2] = (TextView) findViewById(R.id.textView2);
-        view[0][3] = (TextView) findViewById(R.id.textView3);
-        view[0][4] = (TextView) findViewById(R.id.textView4);
-        view[1][0] = (TextView) findViewById(R.id.textView5);
-        view[1][1] = (TextView) findViewById(R.id.textView6);
-        view[1][2] = (TextView) findViewById(R.id.textView7);
-        view[1][3] = (TextView) findViewById(R.id.textView8);
-        view[1][4] = (TextView) findViewById(R.id.textView9);
-        view[2][0] = (TextView) findViewById(R.id.textView10);
-        view[2][1] = (TextView) findViewById(R.id.textView11);
-        view[2][2] = (TextView) findViewById(R.id.textView12);
-        view[2][3] = (TextView) findViewById(R.id.textView13);
-        view[2][4] = (TextView) findViewById(R.id.textView14);
-        view[3][0] = (TextView) findViewById(R.id.textView15);
-        view[3][1] = (TextView) findViewById(R.id.textView16);
-        view[3][2] = (TextView) findViewById(R.id.textView17);
-        view[3][3] = (TextView) findViewById(R.id.textView18);
-        view[3][4] = (TextView) findViewById(R.id.textView19);
-        view[4][0] = (TextView) findViewById(R.id.textView20);
-        view[4][1] = (TextView) findViewById(R.id.textView21);
-        view[4][2] = (TextView) findViewById(R.id.textView22);
-        view[4][3] = (TextView) findViewById(R.id.textView23);
-        view[4][4] = (TextView) findViewById(R.id.textView24);
+        Log.i("v", "a");
+        view[0][0] = (ImageView) findViewById(R.id.imageView0);
+        view[0][1] = (ImageView) findViewById(R.id.imageView1);
+        view[0][2] = (ImageView) findViewById(R.id.imageView2);
+        view[0][3] = (ImageView) findViewById(R.id.imageView3);
+        view[0][4] = (ImageView) findViewById(R.id.imageView4);
+        view[1][0] = (ImageView) findViewById(R.id.imageView5);
+        view[1][1] = (ImageView) findViewById(R.id.imageView6);
+        view[1][2] = (ImageView) findViewById(R.id.imageView7);
+        view[1][3] = (ImageView) findViewById(R.id.imageView8);
+        view[1][4] = (ImageView) findViewById(R.id.imageView9);
+        view[2][0] = (ImageView) findViewById(R.id.imageView10);
+        view[2][1] = (ImageView) findViewById(R.id.imageView11);
+        view[2][2] = (ImageView) findViewById(R.id.imageView12);
+        view[2][3] = (ImageView) findViewById(R.id.imageView13);
+        view[2][4] = (ImageView) findViewById(R.id.imageView14);
+        view[3][0] = (ImageView) findViewById(R.id.imageView15);
+        view[3][1] = (ImageView) findViewById(R.id.imageView16);
+        view[3][2] = (ImageView) findViewById(R.id.imageView17);
+        view[3][3] = (ImageView) findViewById(R.id.imageView18);
+        view[3][4] = (ImageView) findViewById(R.id.imageView19);
+        view[4][0] = (ImageView) findViewById(R.id.imageView20);
+        view[4][1] = (ImageView) findViewById(R.id.imageView21);
+        view[4][2] = (ImageView) findViewById(R.id.imageView22);
+        view[4][3] = (ImageView) findViewById(R.id.imageView23);
+        view[4][4] = (ImageView) findViewById(R.id.imageView24);
         status = (TextView) findViewById(R.id.status);
+        imageSetUp();
         toBoard();
     }
 
@@ -325,10 +332,10 @@ public class Normal extends ActionBarActivity {
     public void display() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board[i][j] == p1) view[i][j].setBackgroundColor(Color.parseColor(ps[0]));
-                else if (board[i][j] == p2) view[i][j].setBackgroundColor(Color.parseColor(ps[1]));
-                else if (board[i][j] == blank) view[i][j].setBackgroundColor(Color.parseColor(white));
-                else if (board[i][j] == movable) view[i][j].setBackgroundColor(Color.parseColor(gray));
+                if (board[i][j] == p1) view[i][j].setImageResource(p1image);
+                else if (board[i][j] == p2) view[i][j].setImageResource(p2image);
+                else if (board[i][j] == blank) view[i][j].setImageResource(blankimage);
+                else if (board[i][j] == movable) view[i][j].setImageResource(movableimage);
             }
         }
     }
@@ -341,14 +348,47 @@ public class Normal extends ActionBarActivity {
         }
     }
 
+    public void imageSetUp(){
+        view[0][0].setTag(p1image);
+        view[0][1].setTag(p1image);
+        view[0][2].setTag(p1image);
+        view[0][3].setTag(p1image);
+        view[0][4].setTag(p1image);
+        view[1][0].setTag(p1image);
+        view[1][1].setTag(blankimage);
+        view[1][2].setTag(blankimage);
+        view[1][3].setTag(blankimage);
+        view[1][4].setTag(p1image);
+        view[2][0].setTag(blankimage);
+        view[2][1].setTag(blankimage);
+        view[2][2].setTag(blankimage);
+        view[2][3].setTag(blankimage);
+        view[2][4].setTag(blankimage);
+        view[3][0].setTag(p2image);
+        view[3][1].setTag(blankimage);
+        view[3][2].setTag(blankimage);
+        view[3][3].setTag(blankimage);
+        view[3][4].setTag(p2image);
+        view[4][0].setTag(p2image);
+        view[4][1].setTag(p2image);
+        view[4][2].setTag(p2image);
+        view[4][3].setTag(p2image);
+        view[4][4].setTag(p2image);
+        for(int i = 0; i < 25;i++){
+            view[i/5][i%5].setImageResource((int)view[i/5][i%5].getTag());
+        }
+    }
+
     public void toBoard() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                int color = ((ColorDrawable) view[i][j].getBackground()).getColor();
-                if (color == Color.parseColor(ps[0])) board[i][j] = p1;
-                if (color == Color.parseColor(ps[1])) board[i][j] = p2;
-                if (color == Color.parseColor(white)) board[i][j] = blank;
-                if (color == Color.parseColor(gray)) board[i][j] = movable;
+                Object image = view[i][j].getTag();
+                int id = image == null ? -1 : (int) image;
+                Log.i("v",image+" "+p1image);
+                if (id == p1image) board[i][j] = p1;
+                if (id == p2image) board[i][j] = p2;
+                if (id == blankimage) board[i][j] = blank;
+                if (id == movableimage) board[i][j] = movable;
             }
         }
     }
