@@ -2,12 +2,9 @@ package com.example.cohalz.entropy;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.PaintDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,6 +26,7 @@ public class Normal extends ActionBarActivity {
     String red = "#ff0000";
     TextView view[][] = new TextView[5][5];
     TextView status;
+    TextView log;
     int board[][] = new int[5][5]; //盤面を記憶する
     //0が1P,-1が白,1が2P,2が移動可能マス
 
@@ -67,6 +65,7 @@ public class Normal extends ActionBarActivity {
         view[4][3] = (TextView) findViewById(R.id.textView23);
         view[4][4] = (TextView) findViewById(R.id.textView24);
         status = (TextView) findViewById(R.id.status);
+        log = (TextView)findViewById(R.id.log);
         toBoard();
     }
 
