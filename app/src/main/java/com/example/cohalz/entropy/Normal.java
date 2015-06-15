@@ -23,16 +23,8 @@ public class Normal extends ActionBarActivity {
     int p1 = 0;
     int p2 = 1;
     int movable = 2;
-    LinkedList<Integer> alonexlist;
-    LinkedList<Integer> aloneylist;
-    String ps[] = new String[2];
     int pastx, pasty;
-    String gray = "#eeeeee";
-    //String p2 = "#ff57ff6a";
-    //String p = p1;
     int ban = 0;
-    String white = "#ffffff";
-    String red = "#ff0000";
     ImageView view[][] = new ImageView[5][5];
     TextView status;
     int board[][] = new int[5][5]; //盤面を記憶する
@@ -44,10 +36,6 @@ public class Normal extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         Log.i("v", "a");
         setContentView(R.layout.activity_normal);
-        alonexlist = new LinkedList<Integer>();
-        aloneylist = new LinkedList<Integer>();
-        ps[0] = "#ff48fffd";
-        ps[1] = "#ff57ff6a";
         Log.i("v", "a");
         view[0][0] = (ImageView) findViewById(R.id.imageView0);
         view[0][1] = (ImageView) findViewById(R.id.imageView1);
@@ -86,33 +74,33 @@ public class Normal extends ActionBarActivity {
                 if (v == view[y][x]) {
                     Log.i("v", "x:" + x + ", y:" + y + ", flag:" + flag);
                     if (flag == 0 && board[y][x] == ban) {
-                        if (isTouched(x, y, ban)) {
+                        if (isTouched(x, y, ban, board)) {
 
-                            if (movable(x, y) > 0) {
+                            if (movable(x, y, ban, board) > 0) {
                                 flag = 1;
                                 pastx = x;
                                 pasty = y;
                             }
                         }
                     } else if (flag == 1) {
-                        aloneClear();
+                        aloneClear(board);
                         if (board[y][x] == movable) {
                             board[pasty][pastx] = blank;
                             board[y][x] = ban;
-                            if (isClear(0)) {
+                            if (isClear(0,board)) {
                                 Intent intent = new Intent(this, p1win.class);
                                 startActivity(intent);
                                // clear(ban);
                                 //return;
-                            } else if (isClear((ban + 1) % 2)) {
-                                clear((ban + 1) % 2);
+                            } else if (isClear((ban + 1) % 2,board)) {
+                                clear((ban + 1) % 2,board);
                                 return;
 
                             } else {
                                 ban = (ban + 1) % 2;
-                                if (isPass()) ban = (ban + 1) % 2;
-                                if (isPass()) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
-                                    movableShowReset();
+                                if (isPass(ban,board)) ban = (ban + 1) % 2;
+                                if (isPass(ban, board)) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
+                                    movableShowReset(board);
                                     status.setText("draw");
                                     flag = 3;
                                 } else if (ban == 1)
@@ -121,47 +109,47 @@ public class Normal extends ActionBarActivity {
                                     status.setText("1P");
                             }
                         }
-                        movableShowReset();
+                        movableShowReset(board);
                         flag = 0;
 
                     } else if (flag == 2) {
-                        movableShowReset();
+                        movableShowReset(board);
                         status.setText(Integer.toString(ban + 1) + "P Win!");
                     } else if (flag == 3) {
-                        movableShowReset();
+                        movableShowReset(board);
                         status.setText("draw");
                     }
                 }
             }
         }
-        display();
+        display(board);
 
     }
     // 画面回転でリセットしちゃうのでなんとかする
 
     //引数の地点からどこに移動できるかのフラグを作成する
     //戻り値は移動できる場所の数
-    public int movable(int x, int y) {
+    public int movable(int x, int y, int ban, int[][] board) {
         int count = 0;
         int flag = 0;
-        if (isContainsAlone()) {
-            createAloneFlag();
+        if (isContainsAlone(ban, board)) {
+            createAloneFlag(ban, board);
             flag = 1;
         }
-        count += countVec(x, y, flag, 1, 1);
-        count += countVec(x, y, flag, 1, 0);
-        count += countVec(x, y, flag, 1, -1);
-        count += countVec(x, y, flag, 0, 1);
-        count += countVec(x, y, flag, 0, -1);
-        count += countVec(x, y, flag, -1, 1);
-        count += countVec(x, y, flag, -1, 0);
-        count += countVec(x, y, flag, -1, -1);
+        count += countVec(x, y, flag, 1, 1, ban, board);
+        count += countVec(x, y, flag, 1, 0, ban, board);
+        count += countVec(x, y, flag, 1, -1, ban, board);
+        count += countVec(x, y, flag, 0, 1, ban, board);
+        count += countVec(x, y, flag, 0, -1, ban, board);
+        count += countVec(x, y, flag, -1, 1, ban, board);
+        count += countVec(x, y, flag, -1, 0, ban, board);
+        count += countVec(x, y, flag, -1, -1, ban, board);
         return count;
     }
 
     //x,y座標と向きを指定して動ける場所を色変える
     //戻り値は動ける場所の数
-    public int countVec(int x, int y, int flag, int xVec, int yVec) {
+    public int countVec(int x, int y, int flag, int xVec, int yVec, int ban,int[][] board) {
         int xi = x + xVec;
         int yi = y + yVec;
         int count = 0;
@@ -171,32 +159,30 @@ public class Normal extends ActionBarActivity {
                     count++;
                     board[yi][xi] = movable;
                 }
-                yi += yVec;
-                xi += xVec;
             } else {
                 board[yi][xi] = movable;
-                yi += yVec;
-                xi += xVec;
                 count++;
             }
+            yi += yVec;
+            xi += xVec;
         }
         return count;
     }
 
-    public boolean isPass() {
+    public boolean isPass(int ban, int[][] board) {
         int count = 0;
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 if (board[y][x] == ban)
-                    if (isTouched(x, y, ban))
-                        count += movable(x, y);
+                    if (isTouched(x, y, ban, board))
+                        count += movable(x, y,ban, board);
             }
         }
-        movableShowReset();
+        movableShowReset(board);
         return count == 0;
     }
 
-    public void movableShowReset() {
+    public void movableShowReset(int[][] board) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (board[i][j] >= movable)
@@ -205,12 +191,13 @@ public class Normal extends ActionBarActivity {
         }
     }
 
-    public void createAloneFlag() {
+    public void createAloneFlag(int ban, int[][] board) {
+        LinkedList<Integer> aloneList = new LinkedList<>();
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
-                if (isAlone(x, y)) {
-                    alonexlist.add(x);
-                    aloneylist.add(y);
+                if (isAlone(x, y,board)) {
+                    aloneList.add(x);
+                    aloneList.add(y);
                     //最初は普通に色塗る
                     //二回目以降は色が塗ってあるところの数字を増やしてそれ以外はリセット
                     //数字を元に戻すのを繰り返す
@@ -218,45 +205,45 @@ public class Normal extends ActionBarActivity {
             }
 
         }
-        for (int i = 0; i < alonexlist.size(); i++) {
-            int x = alonexlist.remove();
-            int y = aloneylist.remove();
+        for (int i = 0; i < aloneList.size()/2; i++) {
+            int x = aloneList.remove();
+            int y = aloneList.remove();
             if (i == 0) {
-                changeAroundColor(x, y, -1, ban + 3);
+                changeAroundColor(x, y, -1, ban + 3, board);
 
             } else {
-                changeAroundColor(x, y, 3 + ban, 5 + ban);
-                countDown();
+                changeAroundColor(x, y, 3 + ban, 5 + ban, board);
+                countDown(ban,board);
             }
         }
     }
 
-    public void clear(int ban) {
+    public void clear(int ban, int[][] board) {
         flag = 2;
-        movableShowReset();
+        movableShowReset(board);
         status.setText(Integer.toString(ban + 1) + "P Win!");
-        display();
+        display(board);
     }
 
-    public boolean isAlone(int x, int y) {
-        return !isTouched(x, y, p1) && !isTouched(x, y, p2);
+    public boolean isAlone(int x, int y, int[][] board) {
+        return !isTouched(x, y, p1, board) && !isTouched(x, y, p2, board);
     }
 
-    public boolean isContainsAlone() {
+    public boolean isContainsAlone(int ban, int[][] board) {
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
-                if (isAlone(x, y) && board[y][x] == ban) return true;
+                if (isAlone(x, y, board) && board[y][x] == ban) return true;
             }
         }
         return false;
     }
 
-    public boolean isClear(int ban) {
+    public boolean isClear(int ban, int[][] board) {
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 if (board[y][x] == ban) {
-                    if (isTouched(x, y, ban)) return false;
-                    if (!isTouched(x, y, (ban + 1) % 2)) return false;
+                    if (isTouched(x, y, ban, board)) return false;
+                    if (!isTouched(x, y, (ban + 1) % 2, board)) return false;
                 }
             }
         }
@@ -264,7 +251,7 @@ public class Normal extends ActionBarActivity {
     }
 
 
-    public boolean isTouched(int x, int y, int ban) {
+    public boolean isTouched(int x, int y, int ban, int[][] board) {
         if (y > 0) {
             if (board[y - 1][x] == ban) return true;
             if (x > 0) {
@@ -292,7 +279,7 @@ public class Normal extends ActionBarActivity {
         return false;
     }
 
-    public void changeAroundColor(int x, int y, int from, int to) {
+    public void changeAroundColor(int x, int y, int from, int to, int[][] board) {
         if (y > 0) {
             if (board[y - 1][x] == from) board[y - 1][x] = to;
             if (x > 0) {
@@ -319,7 +306,7 @@ public class Normal extends ActionBarActivity {
         }
     }
 
-    public void countDown() {
+    public void countDown(int ban,int[][] board) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (board[i][j] == 3 + ban) board[i][j] = blank;
@@ -329,7 +316,7 @@ public class Normal extends ActionBarActivity {
         }
     }
 
-    public void display() {
+    public void display(int[][] board) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (board[i][j] == p1) view[i][j].setImageResource(p1image);
@@ -340,7 +327,7 @@ public class Normal extends ActionBarActivity {
         }
     }
 
-    public void aloneClear() {
+    public void aloneClear(int[][] board) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (board[i][j] >= 3) board[i][j] = movable;
