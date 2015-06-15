@@ -132,7 +132,7 @@ public class BluetoothActivity extends Normal {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                display();
+                display(board);
                 if (ban == 1)
                     status.setText("2P");
                 else
@@ -172,16 +172,16 @@ public class BluetoothActivity extends Normal {
                 if (v == view[y][x]) {
                     Log.i("v", "x:" + x + ", y:" + y + ", flag:" + flag);
                     if (flag == 0 && board[y][x] == ban) {
-                        if (isTouched(x, y, ban)) {
+                        if (isTouched(x, y, ban, board)) {
 
-                            if (movable(x, y) > 0) {
+                            if (movable(x, y, ban, board) > 0) {
                                 flag = 1;
                                 pastx = x;
                                 pasty = y;
                             }
                         }
                     } else if (flag == 1) {
-                        aloneClear();
+                        aloneClear(board);
                         if (board[y][x] == 2) {
                             board[pasty][pastx] = -1;
                             board[y][x] = ban;
@@ -190,18 +190,18 @@ public class BluetoothActivity extends Normal {
                                 //invalidate();
                                 mBt.sendMessage(message);
                             }
-                            if (isClear(ban)) {
-                                clear(ban);
+                            if (isClear(ban, board)) {
+                                clear(ban, board);
                                 return;
-                            } else if (isClear((ban + 1) % 2)) {
-                                clear((ban + 1) % 2);
+                            } else if (isClear((ban + 1) % 2, board)) {
+                                clear((ban + 1) % 2, board);
                                 return;
 
                             } else {
                                 ban = (ban + 1) % 2;
-                                if (isPass()) ban = (ban + 1) % 2;
-                                if (isPass()) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
-                                    movableShowReset();
+                                if (isPass(ban, board)) ban = (ban + 1) % 2;
+                                if (isPass(ban, board)) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
+                                    movableShowReset(board);
                                     status.setText("draw");
                                     flag = 3;
                                 } else if (ban == 1)
@@ -210,20 +210,20 @@ public class BluetoothActivity extends Normal {
                                     status.setText("1P");
                             }
                         }
-                        movableShowReset();
+                        movableShowReset(board);
                         flag = 0;
 
                     } else if (flag == 2) {
-                        movableShowReset();
+                        movableShowReset(board);
                         status.setText(Integer.toString(ban + 1) + "P Win!");
                     } else if (flag == 3) {
-                        movableShowReset();
+                        movableShowReset(board);
                         status.setText("draw");
                     }
                 }
             }
         }
-        display();
+        display(board);
 
     }
 
