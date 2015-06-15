@@ -1,20 +1,20 @@
 package com.example.cohalz.entropy;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 
-public class p1win extends ActionBarActivity {
+public class p2win extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p1win);
         ImageView imageView1 = (ImageView)findViewById(R.id.imageView);
-        imageView1.setImageResource(R.drawable.tiger_win);
+        imageView1.setImageResource(R.drawable.dragon_win);
     }
 
     @Override

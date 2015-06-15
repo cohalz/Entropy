@@ -64,7 +64,7 @@ public class VSCPU extends Normal {
                         flag = 0;
                         display(board);
                         if(ban == 1 && flag == 0) {
-                            Log.i("v", alfabeta(board,ban,2)+"");
+                            Log.i("v", alfabeta(board,ban,1)+"");
                             //Log.i("v",list.size()/4 + "");
 //                            LinkedList<Integer> list = movableList(ban, board);
 //                            Log.i("v", Arrays.toString(list.toArray()));

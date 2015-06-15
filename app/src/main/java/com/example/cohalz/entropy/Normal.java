@@ -13,8 +13,8 @@ import java.util.LinkedList;
 
 public class Normal extends ActionBarActivity {
 
-    int p1image = R.drawable.blue;
-    int p2image = R.drawable.green;
+    int p1image = R.drawable.tiger;
+    int p2image = R.drawable.dragon;
     int blankimage = R.drawable.white;
     int movableimage = R.drawable.gray;
 
@@ -92,8 +92,9 @@ public class Normal extends ActionBarActivity {
                                 startActivity(intent);
                                // clear(ban);
                                 //return;
-                            } else if (isClear((ban + 1) % 2,board)) {
-                                clear((ban + 1) % 2,board);
+                            } else if (isClear(1,board)) {
+                                Intent intent = new Intent(this, p2win.class);
+                                startActivity(intent);
                                 return;
 
                             } else {
