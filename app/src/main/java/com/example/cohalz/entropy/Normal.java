@@ -27,6 +27,7 @@ public class Normal extends ActionBarActivity {
     int ban = 0;
     ImageView view[][] = new ImageView[5][5];
     TextView status;
+    TextView log;
     int board[][] = new int[5][5]; //盤面を記憶する
     //0が1P,-1が白,1が2P,2が移動可能マス
 
@@ -63,6 +64,9 @@ public class Normal extends ActionBarActivity {
         view[4][3] = (ImageView) findViewById(R.id.imageView23);
         view[4][4] = (ImageView) findViewById(R.id.imageView24);
         status = (TextView) findViewById(R.id.status);
+
+        log = (TextView)findViewById(R.id.log);
+
         imageSetUp();
         toBoard();
     }

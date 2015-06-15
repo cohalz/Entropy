@@ -3,11 +3,8 @@ package com.example.cohalz.entropy;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,30 +12,26 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.util.LinkedList;
+import java.util.StringTokenizer;
 
 
 public class BluetoothActivity extends Normal {
 
     //1が1P,0が白,-1が2P,2が移動可能マス
     //private BluetoothAdapter mBtAdapter;
-    private TextView mResultView;
     private ArrayAdapter<String> mServers;
     private ArrayAdapter<String> mCandidateServers;
     private View mView;
     private final Handler mHandler = new Handler();
     private Bt mBt;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_bluetooth);
 
-        mResultView = (TextView)findViewById(R.id.bt_text);
+        //mResultView = (TextView)findViewById(R.id.bt_text);
         // インテントフィルタの作成
         //IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         // ブロードキャストレシーバの登録
@@ -65,7 +58,7 @@ public class BluetoothActivity extends Normal {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -79,7 +72,6 @@ public class BluetoothActivity extends Normal {
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_discoverable) {
             mBt.startDiscoverable();
-            return true;
         }else if (id == R.id.menu_start_server) {
             mBt.startServer();
         }else if (id == R.id.menu_search_server) {
@@ -130,7 +122,6 @@ public class BluetoothActivity extends Normal {
             dialog.show();
         }
         return true;
-        //return super.onOptionsItemSelected(item);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -141,9 +132,99 @@ public class BluetoothActivity extends Normal {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                mView.invalidate();
+                display(board);
+                if (ban == 1)
+                    status.setText("2P");
+                else
+                    status.setText("1P");
             }
         });
+    }
+    public void receiveMessage(String message) {
+        StringTokenizer st = new StringTokenizer(message, ",");
+        int newx = Integer.parseInt(st.nextToken());
+        int newy = Integer.parseInt(st.nextToken());
+        int prex = Integer.parseInt(st.nextToken());
+        int prey = Integer.parseInt(st.nextToken());
+        int turn = Integer.parseInt(st.nextToken());
+        //status.setText(message);
+        move(newx, newy, prex, prey, turn);
+    }
+    public void test() {
+        log.setText("test1");
+    }
+    public void test2() {
+        log.setText("test2");
+    }
+    public void test3() {
+        log.setText("test3");
+    }
+    public void move(int newx, int newy, int prex, int prey, int turn){
+        board[prey][prex] = -1;
+        board[newy][newx] = turn;
+        ban = (turn + 1) % 2;
+    }
+    @Override
+    public void onClick(View v) {
+
+        for (int y = 0; y < 5; y++) {
+            for (int x = 0; x < 5; x++) {
+                if (v == view[y][x]) {
+                    Log.i("v", "x:" + x + ", y:" + y + ", flag:" + flag);
+                    if (flag == 0 && board[y][x] == ban) {
+                        if (isTouched(x, y, ban, board)) {
+
+                            if (movable(x, y, ban, board) > 0) {
+                                flag = 1;
+                                pastx = x;
+                                pasty = y;
+                            }
+                        }
+                    } else if (flag == 1) {
+                        aloneClear(board);
+                        if (board[y][x] == 2) {
+                            board[pasty][pastx] = -1;
+                            board[y][x] = ban;
+                            String message = String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(pastx) + "," + String.valueOf(pasty) + "," + String.valueOf(ban);
+                            if (message != null) {
+                                //invalidate();
+                                mBt.sendMessage(message);
+                            }
+                            if (isClear(ban, board)) {
+                                clear(ban, board);
+                                return;
+                            } else if (isClear((ban + 1) % 2, board)) {
+                                clear((ban + 1) % 2, board);
+                                return;
+
+                            } else {
+                                ban = (ban + 1) % 2;
+                                if (isPass(ban, board)) ban = (ban + 1) % 2;
+                                if (isPass(ban, board)) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
+                                    movableShowReset(board);
+                                    status.setText("draw");
+                                    flag = 3;
+                                } else if (ban == 1)
+                                    status.setText("2P");
+                                else
+                                    status.setText("1P");
+                            }
+                        }
+                        movableShowReset(board);
+                        flag = 0;
+
+                    } else if (flag == 2) {
+                        movableShowReset(board);
+                        status.setText(Integer.toString(ban + 1) + "P Win!");
+                    } else if (flag == 3) {
+                        movableShowReset(board);
+                        status.setText("draw");
+                    }
+                }
+            }
+        }
+        display(board);
+
     }
 
 }

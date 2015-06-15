@@ -29,6 +29,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".BluetoothActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".p1win"
             android:label="@string/title_activity_p1win" >
         </activity>

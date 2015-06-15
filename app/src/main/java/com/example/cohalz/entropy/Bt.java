@@ -1,6 +1,5 @@
 package com.example.cohalz.entropy;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
@@ -19,6 +18,8 @@ import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by ryu on 2015/05/17.
  */
@@ -30,6 +31,7 @@ public class Bt {
             OutputStream os = mSocket.getOutputStream();
             os.write(message.getBytes());
             os.write("\n".getBytes());
+            //activity.log.setText(message);
         }
 
         protected void loop() throws IOException {
@@ -37,14 +39,14 @@ public class Bt {
             BufferedReader br = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
             String message;
             while ((message = br.readLine()) != null) {
-                //mBoard.receiveMessage(message);
-                //activity.invalidate();
+                activity.receiveMessage(message);
+                activity.invalidate();
             }
         }
     }
 
     private class ServerThread extends ReceiverThread {
-        private BluetoothServerSocket mServerSocket;
+        private BluetoothServerSocket mServerSocket = null;
 
 
         private ServerThread() {
@@ -117,20 +119,17 @@ public class Bt {
     }
     private static final UUID APP_UUID = UUID.fromString("a1e044cc-0c61-4abf-800c-0a9afd23e16c");
 
-    private final static int REQUEST_ENABLE_BLUETOOTH = 1;
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1234;
     private static final int REQUEST_DISCOVERABLE_BT = 5678;
     private static final int DURATION = 300;
     private final BluetoothActivity activity;
     //BluetoothAdapter取得
     BluetoothAdapter Bt = BluetoothAdapter.getDefaultAdapter();
-    BluetoothDevice BtDevice = null;
-    BluetoothSocket BtSocket;
     private ServerThread mServerThread;
     private ClientThread mClientThread;
     private final ArrayAdapter<String> mCandidateServers;
     private final String TAG = getClass().getSimpleName();
 
-    private String mResult = "";
 
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -160,20 +159,16 @@ public class Bt {
     }
 
 
-    protected void turnOn() {
-        boolean btEnable = Bt.isEnabled();
-        if (btEnable == true) {
-            //BluetoothがONだった場合の処理
-        } else {
-            //OFFだった場合、ONにすることを促すダイアログを表示する画面に遷移
-            Intent btOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            activity.startActivityForResult(btOn, REQUEST_ENABLE_BLUETOOTH);
+    public void turnOn() {
+        if (!Bt.isEnabled()) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
         }
     }
 
     protected void onActivityResult(int requestCode, int ResultCode, Intent date) {
         if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
-            if (ResultCode == Activity.RESULT_OK) {
+            if (ResultCode == RESULT_OK) {
                 //BluetoothがONにされた場合の処理
                 //activity.errorDialog("BluetoothをONにしてもらえました。");
             } else {
@@ -219,11 +214,14 @@ public class Bt {
     }
 
     public void sendMessage(String message) {
+        //activity.test3();
         try {
             if (mServerThread != null) {
+                //activity.test();
                 mServerThread.sendMessage(message);
             }
             if (mClientThread != null) {
+                //activity.test2();
                 mClientThread.sendMessage(message);
             }
         } catch (IOException e) {

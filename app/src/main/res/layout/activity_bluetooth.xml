@@ -283,14 +283,13 @@
                 android:text="1P"
                 android:id="@+id/status" />
 
-        </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="test"
+                android:id="@+id/log" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="i"
-            android:id="@+id/bt_text" />
+        </LinearLayout>
 
     </LinearLayout>
 
