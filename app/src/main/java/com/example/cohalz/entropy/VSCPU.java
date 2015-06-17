@@ -13,6 +13,7 @@ import java.util.LinkedList;
 
 
 public class VSCPU extends Normal {
+    int MAXCOUNT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class VSCPU extends Normal {
                         flag = 0;
                         display(board);
                         if(ban == 1 && flag == 0) {
-                            Log.i("v", alfabeta(board,ban,1)+"");
+                            Log.i("v", alfabeta(board,ban,MAXCOUNT)+"");
                             //Log.i("v",list.size()/4 + "");
 //                            LinkedList<Integer> list = movableList(ban, board);
 //                            Log.i("v", Arrays.toString(list.toArray()));
@@ -143,6 +144,10 @@ public class VSCPU extends Normal {
 
     public int alfabeta(int[][] board, int ban, int count){
         int max = -Integer.MAX_VALUE;
+        int maxprevx = 0;
+        int maxprevy = 0;
+        int maxx = 0;
+        int maxy = 0;
         int val;
         int[][] copyBoard = new int[5][5];
         if(isClear(1,board)) return 100;
@@ -166,13 +171,28 @@ public class VSCPU extends Normal {
             copyBoard[befory][beforx] = copyBoard[y][x];
             copyBoard[y][x] = tmp;
             boards[i] = copyBoard;
+            val = alfabeta(boards[i],(ban+1)%2,count-1);
+            if(ban == 1 && val > max) {
+                max = val;
+                maxprevx = beforx;
+                maxprevy = befory;
+                maxx = x;
+                maxy = y;
+            }
+            if(ban == 0 && val > -max) {
+                max = -val;
+            }
+            if(count == MAXCOUNT){
+                view[maxprevy][maxprevx].performClick();
+                view[maxy][maxx].performClick();
+            }
             i++;
         }
-        for(i = 0;i < boards.length; i++){
-            val = alfabeta(boards[i],(ban+1)%2,count-1);
-            if(ban == 1 && val > max) max = val;
-            if(ban == 0 && val > -max) max = -val;
-        }
+//        for(i = 0;i < boards.length; i++){
+//            val = alfabeta(boards[i],(ban+1)%2,count-1);
+//            if(ban == 1 && val > max) max = val;
+//            if(ban == 0 && val > -max) max = -val;
+//        }
         return max;
     }
 
