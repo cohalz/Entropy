@@ -163,25 +163,27 @@ public class VSCPU extends Normal {
             for(int j = 0;j < 5;j++){
                 copyBoard[j] = board[j].clone();
             }
-            int beforx = list.remove();
-            int befory = list.remove();
+            int prevx = list.remove();
+            int prevy = list.remove();
             int x = list.remove();
             int y = list.remove();
-            int tmp = copyBoard[befory][beforx];
-            copyBoard[befory][beforx] = copyBoard[y][x];
+            int tmp = copyBoard[prevy][prevx];
+            copyBoard[prevy][prevx] = copyBoard[y][x];
             copyBoard[y][x] = tmp;
             boards[i] = copyBoard;
             val = alfabeta(boards[i],(ban+1)%2,count-1);
             if(ban == 1 && val > max) {
                 max = val;
-                maxprevx = beforx;
-                maxprevy = befory;
+                maxprevx = prevx;
+                maxprevy = prevy;
                 maxx = x;
                 maxy = y;
             }
             if(ban == 0 && val > -max) {
                 max = -val;
             }
+
+            //最も浅い部分で最大値を取得しその場所をクリックさせる
             if(count == MAXCOUNT){
                 view[maxprevy][maxprevx].performClick();
                 view[maxy][maxx].performClick();
