@@ -43,6 +43,7 @@ public class BluetoothActivity extends Normal {
 
 
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -148,7 +149,7 @@ public class BluetoothActivity extends Normal {
         int prey = Integer.parseInt(st.nextToken());
         int turn = Integer.parseInt(st.nextToken());
         //status.setText(message);
-        move(newx, newy, prex, prey, turn);
+        move(newx, newy, prex, prey, turn, board);
     }
     public void test() {
         log.setText("test1");
@@ -159,7 +160,7 @@ public class BluetoothActivity extends Normal {
     public void test3() {
         log.setText("test3");
     }
-    public void move(int newx, int newy, int prex, int prey, int turn){
+    public void move(int newx, int newy, int prex, int prey, int turn, int[][] board){
         board[prey][prex] = -1;
         board[newy][newx] = turn;
         ban = (turn + 1) % 2;
@@ -187,7 +188,7 @@ public class BluetoothActivity extends Normal {
                             board[y][x] = ban;
                             String message = String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(pastx) + "," + String.valueOf(pasty) + "," + String.valueOf(ban);
                             if (message != null) {
-                                //invalidate();
+                                invalidate();
                                 mBt.sendMessage(message);
                             }
                             if (isClear(ban, board)) {
@@ -223,8 +224,8 @@ public class BluetoothActivity extends Normal {
                 }
             }
         }
-        display(board);
-
+        //display(board);
+        invalidate();
     }
 
 }

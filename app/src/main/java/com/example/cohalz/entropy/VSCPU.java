@@ -1,14 +1,12 @@
 package com.example.cohalz.entropy;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 
@@ -189,6 +187,7 @@ public class VSCPU extends Normal {
             }
         }
         //最も浅い部分で最大値を取得しその場所をクリックさせる
+
         if(count == MAXCOUNT){
             view[maxprevy][maxprevx].performClick();
             view[maxy][maxx].performClick();
@@ -196,6 +195,7 @@ public class VSCPU extends Normal {
 
         if(ban == 1) return max;
         else return min;
+
     }
 
     @Override

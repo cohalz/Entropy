@@ -13,6 +13,7 @@ public class StartMenu extends ActionBarActivity {
 
     TextView normal;
     TextView bluetooth;
+    TextView vscpu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,7 @@ public class StartMenu extends ActionBarActivity {
         setContentView(R.layout.activity_start_menu);
         normal = (TextView) findViewById(R.id.normal);
         bluetooth = (TextView) findViewById(R.id.bluetooth);
+        vscpu = (TextView) findViewById(R.id.vscpu);
 
     }
 
@@ -30,6 +32,10 @@ public class StartMenu extends ActionBarActivity {
         }
         if(v == bluetooth){
             Intent intent = new Intent(this, BluetoothActivity.class);
+            startActivity(intent);
+        }
+        if(v == vscpu){
+            Intent intent = new Intent(this, VSCPU.class);
             startActivity(intent);
         }
     }

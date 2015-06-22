@@ -25,6 +25,7 @@ public class Normal extends ActionBarActivity {
     int movable = 2;
     int pastx, pasty;
     int ban = 0;
+
     ImageView view[][] = new ImageView[5][5];
     TextView status;
     TextView log;
