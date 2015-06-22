@@ -46,7 +46,7 @@ public class Bt {
     }
 
     private class ServerThread extends ReceiverThread {
-        private BluetoothServerSocket mServerSocket = null;
+        private BluetoothServerSocket mServerSocket;
 
 
         private ServerThread() {
@@ -60,6 +60,7 @@ public class Bt {
         @Override
         public void run() {
             try {
+
                 Log.d(TAG, "accepting...");
                 mSocket = mServerSocket.accept();
                 Log.d(TAG, "accepted");
@@ -67,7 +68,8 @@ public class Bt {
                 loop();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
+            }
+            finally {
                 cancel();
             }
         }
@@ -122,7 +124,7 @@ public class Bt {
     private static final int REQUEST_ENABLE_BLUETOOTH = 1234;
     private static final int REQUEST_DISCOVERABLE_BT = 5678;
     private static final int DURATION = 300;
-    private final BluetoothActivity activity;
+    private BluetoothActivity activity;
     //BluetoothAdapter取得
     BluetoothAdapter Bt = BluetoothAdapter.getDefaultAdapter();
     private ServerThread mServerThread;
@@ -214,14 +216,11 @@ public class Bt {
     }
 
     public void sendMessage(String message) {
-        //activity.test3();
         try {
             if (mServerThread != null) {
-                //activity.test();
                 mServerThread.sendMessage(message);
             }
             if (mClientThread != null) {
-                //activity.test2();
                 mClientThread.sendMessage(message);
             }
         } catch (IOException e) {
@@ -238,7 +237,5 @@ public class Bt {
             mClientThread = null;
         }
     }
-
-
 
 }
