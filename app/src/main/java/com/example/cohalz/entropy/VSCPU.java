@@ -10,8 +10,10 @@ import android.view.View;
 import java.util.LinkedList;
 
 
+
 public class VSCPU extends Normal {
-    int MAXCOUNT = 2;
+    int MAXCOUNT = 3;
+    int bprex,bprey,bx,by;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,26 +39,33 @@ public class VSCPU extends Normal {
                         if (board[y][x] == movable) {
                             board[pasty][pastx] = blank;
                             board[y][x] = ban;
-                            if (isClear(0, board)) {
+                            if (isClear(0,board)) {
                                 Intent intent = new Intent(this, p1win.class);
                                 startActivity(intent);
                                 // clear(ban);
                                 //return;
-                            } else if (isClear((ban + 1) % 2, board)) {
-                                clear((ban + 1) % 2,board);
+                            } else if (isClear(1,board)) {
+                                Intent intent = new Intent(this, p2win.class);
+                                startActivity(intent);
                                 return;
 
                             } else {
                                 ban = (ban + 1) % 2;
-                                if (isPass(ban,board)) ban = (ban + 1) % 2;
-                                if (isPass(ban,board)) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
+                                if (isPass(ban,board)) {
                                     movableShowReset(board);
-                                    status.setText("draw");
-                                    flag = 3;
-                                } else if (ban == 1)
-                                    status.setText("2P");
-                                else
-                                    status.setText("1P");
+                                    display(board);
+                                    ban = (ban + 1) % 2;
+                                    flag = 0;
+                                    if(ban == 1){
+                                        alfabeta(board, ban, MAXCOUNT, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                                        return;
+                                    }
+                                    if(isPass(ban, board)){
+                                        status.setText("draw");
+                                        flag = 3;
+                                    }
+                                } else
+                                    setText(ban);
                             }
                         }
                         movableShowReset(board);
@@ -64,7 +73,8 @@ public class VSCPU extends Normal {
                         display(board);
                         if(ban == 1 && flag == 0) {
                             display(board);
-                            Log.i("v", alfabeta(board,ban,MAXCOUNT)+"tendayo");
+                            alfabeta(board, ban, MAXCOUNT, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                            return;
                         }
 
                     } else if (flag == 2) {
@@ -127,74 +137,96 @@ public class VSCPU extends Normal {
     }
 
     public int eval(int ban,int[][] board){
-        LinkedList<Integer> list = movableList(ban, board);
         int count = 0;
         for(int y = 0;y < 5;y++){
             for(int x = 0; x < 5; x++){
                 if(board[y][x] == ban){
-                    if(!isTouched(x,y,1,board)) count += 3;
-                    if(isTouched(x,y,0,board)) count++;
-               //     if(valueBoard[y][x] == 5) count += 1;
+
+                    //if(!isTouched(x,y,(ban),board)) count += 3;
+                    //if(isTouched(x,y,(ban+1)%2,board)) count++;
                 }
 
             }
         }
-        return 10 * count;
+        return movableList((ban+1)%2, board).size();
     }
 
-    public int alfabeta(int[][] board, int ban, int count){
+    public int minimax(int[][] board, int ban, int count){
+        return alfabeta(board,ban,count,Integer.MIN_VALUE,Integer.MAX_VALUE);
+    }
+
+    public int alfabeta(int[][] board, int ban, int count,int alfa,int beta){
         int max = Integer.MIN_VALUE;
-        int min = Integer.MAX_VALUE;
-        int maxprevx = 0;
-        int maxprevy = 0;
-        int maxx = 0;
-        int maxy = 0;
+        int maxprevx = -1;
+        int maxprevy = -1;
+        int maxx = -1;
+        int maxy = -1;
+        int prevx = -1;
+        int prevy = -1;
+        int x = -1;
+        int y = -1;
         int val;
         int[][] copyBoard = new int[5][5];
-        if(isClear(1,board)) return 1000;
-        if(isClear(0,board)) return -1000;
         for(int i = 0;i < 5;i++){
                 copyBoard[i] = board[i].clone();
         }
         if(count == 0) return eval(ban,copyBoard);
         LinkedList<Integer> list = movableList(ban, copyBoard);
+        if(isClear(1, board)) {
+            return 1000;
+        }
+        if(isClear(0, board)) {
+            return -1000;
+        }
         while(!list.isEmpty()){
             for(int j = 0;j < 5;j++){
                 copyBoard[j] = board[j].clone();
             }
-            int prevx = list.remove();
-            int prevy = list.remove();
-            int x = list.remove();
-            int y = list.remove();
+            prevx = list.remove();
+            prevy = list.remove();
+            x = list.remove();
+            y = list.remove();
             int tmp = copyBoard[prevy][prevx];
             copyBoard[prevy][prevx] = copyBoard[y][x];
             copyBoard[y][x] = tmp;
-            val = alfabeta(copyBoard,(ban+1)%2,count-1);
-            Log.i("v",val+"");
-            if(ban == 1 && val > max) {
-                max = val;
-                maxprevx = prevx;
-                maxprevy = prevy;
-                maxx = x;
-                maxy = y;
-            }
-            if(ban == 0 && val < min) {
-                min = val;
-                maxprevx = prevx;
-                maxprevy = prevy;
-                maxx = x;
-                maxy = y;
+
+            val = alfabeta(copyBoard,(ban+1)%2,count-1,alfa,beta);
+           // Log.i("v","val:"+val+", count"+count);
+            if(count != MAXCOUNT) {
+                if (ban == 1 && val > alfa) {
+                    alfa = val;
+                    if (count != MAXCOUNT && alfa >= beta) return beta;
+                }
+                if (ban == 0 && val < beta) {
+                    beta = val;
+                    if (count != MAXCOUNT && alfa >= beta) return alfa;
+                }
+            }else {
+                if(val > max
+                        )
+                {
+                    max = val;
+                    maxprevx = prevx;
+                    maxprevy = prevy;
+                    maxx = x;
+                    maxy = y;
+                }
             }
         }
         //最も浅い部分で最大値を取得しその場所をクリックさせる
 
         if(count == MAXCOUNT){
+            bprex = maxprevx;
+            bprey = maxprevy;
+            bx = maxx;
+            by = maxy;
             view[maxprevy][maxprevx].performClick();
             view[maxy][maxx].performClick();
+            return -1;
+        } else{
+            if(ban == 0) return beta;
+            else return alfa;
         }
-
-        if(ban == 1) return max;
-        else return min;
 
     }
 

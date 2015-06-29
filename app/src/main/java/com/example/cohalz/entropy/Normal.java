@@ -104,15 +104,17 @@ public class Normal extends ActionBarActivity {
 
                             } else {
                                 ban = (ban + 1) % 2;
-                                if (isPass(ban,board)) ban = (ban + 1) % 2;
-                                if (isPass(ban, board)) { //ふたりともパスならDrawだが一人だけパスでもなぜか呼ばれることがある
+                                if (isPass(ban,board)) {
                                     movableShowReset(board);
-                                    status.setText("draw");
-                                    flag = 3;
-                                } else if (ban == 1)
-                                    status.setText("2P");
-                                else
-                                    status.setText("1P");
+                                    ban = (ban + 1) % 2;
+                                    flag = 0;
+                                    if(isPass(ban, board)){
+                                        status.setText("draw");
+                                        flag = 3;
+                                    }
+                                    return;
+                                } else
+                                    setText(ban);
                             }
                         }
                         movableShowReset(board);
@@ -386,5 +388,8 @@ public class Normal extends ActionBarActivity {
         }
     }
 
+    public void setText(int ban){
+        status.setText((ban + 1) + "P");
+    }
 
 }
