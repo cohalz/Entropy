@@ -65,6 +65,7 @@ public class Bt {
                 mSocket = mServerSocket.accept();
                 Log.d(TAG, "accepted");
                 //mBoard = new Board(Board.COLOR_WHITE);
+                activity = new BluetoothActivity(0);
                 loop();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -101,6 +102,7 @@ public class Bt {
                 // サーバに接続する
                 mSocket.connect();
                 //mBoard = new Board(Board.COLOR_BLACK);
+                activity = new BluetoothActivity(1);
                 loop();
             } catch (IOException e) {
                 e.printStackTrace();

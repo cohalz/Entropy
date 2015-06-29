@@ -12,11 +12,13 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Normal"
-            android:label="VS-Mode" >
+            android:label="VS-Mode"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".StartMenu"
-            android:label="@string/title_activity_start_menu" >
+            android:label="@string/title_activity_start_menu"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +27,8 @@
         </activity>
         <activity
             android:name=".BluetoothActivity"
-            android:label="Bluetooth-VS-Mode" >
+            android:label="Bluetooth-VS-Mode"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".p1win"
