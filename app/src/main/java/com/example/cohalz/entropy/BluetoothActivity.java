@@ -29,8 +29,15 @@ public class BluetoothActivity extends Normal {
     private final Handler mHandler = new Handler();
     private Bt mBt;
 
-    public BluetoothActivity(int n) {
+    public BtPlayer p1;
+    public BtPlayer p2;
+    public BtPlayer[] players;
 
+
+    public BluetoothActivity(int n) {
+        p1 = new BtPlayer(0, true, mBt, this);
+        p2 = new BtPlayer(1,false, mBt, this);
+        players = new BtPlayer[]{p1, p2};
     }
 
     @Override
@@ -162,43 +169,5 @@ public class BluetoothActivity extends Normal {
         players[0].allChangeBan(players[1]);
     }
 
-    @Override
-    public void onClick(View v) {
-
-        int x = 0, y;
-
-        for_label:
-        for (y = 0; y < 5; y++)
-            for (x = 0; x < 5; x++)
-                if (v == board.viewBoard.view[y][x]) break for_label;
-
-
-        for(int i = 0; i < 2; i++){
-            if(players[i].ban){
-                Point point = new Point(x,y);
-                if(players[i].state == FROM){
-                    players[i].doFromClick(board,point);
-                } else {
-                    if(board.checkToPoint(point)){
-                        players[i].doToClick(players[(i+1)%2],board,point);
-                        String message =
-                            String.valueOf(players[i].move.to.x) + "," +
-                            String.valueOf(players[i].move.to.y) + "," +
-                            String.valueOf(players[i].move.from.x) + "," +
-                            String.valueOf(players[i].move.from.y) + "," +
-                            String.valueOf(players[i].number);
-                    
-                        if (message != null) {
-                            invalidate();
-                            mBt.sendMessage(message);
-                        }
-                    }
-                }
-                break;
-            }
-            invalidate();
-        }
-
-    }
 
 }
