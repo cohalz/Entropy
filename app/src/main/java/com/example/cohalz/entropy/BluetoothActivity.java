@@ -151,28 +151,17 @@ public class BluetoothActivity extends Normal {
     }
     public void receiveMessage(String message) {
         StringTokenizer st = new StringTokenizer(message, ",");
-        int newx = Integer.parseInt(st.nextToken());
-        int newy = Integer.parseInt(st.nextToken());
-        int prex = Integer.parseInt(st.nextToken());
-        int prey = Integer.parseInt(st.nextToken());
-        int turn = Integer.parseInt(st.nextToken());
+        Point from = new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+        Point to = new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+        int ban = Integer.parseInt(st.nextToken());
         //status.setText(message);
         //move(newx, newy, prex, prey, turn, board);
+        board.move(new Move(from,to));
+
+        //番を変更
+        players[0].allChangeBan(players[1]);
     }
-    public void test() {
-        log.setText("test1");
-    }
-    public void test2() {
-        log.setText("test2");
-    }
-    public void test3() {
-        log.setText("test3");
-    }
-    public void move(int newx, int newy, int prex, int prey, int turn, int[][] board){
-        board[prey][prex] = -1;
-        board[newy][newx] = turn;
-        //ban = (turn + 1) % 2;
-    }
+
     @Override
     public void onClick(View v) {
 

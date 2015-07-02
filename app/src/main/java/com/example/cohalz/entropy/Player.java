@@ -20,9 +20,15 @@ public class Player {
         this.move = new Move(new Point(-1,-1),new Point(-1,-1));
     }
 
-    public void changeBan() {
+    //「その人」の番かどうかのフラグを変更
+    private void changeBan() {
         this.ban = !this.ban;
         this.state = FROM;
+    }
+
+    public void allChangeBan(Player another){
+        changeBan();
+        another.changeBan();
     }
 
     public void changeState(){
@@ -45,8 +51,7 @@ public class Player {
         if (board.checkToPoint(point)){
             move.to = point;
             change(board);
-            changeBan();
-            another.changeBan();
+            allChangeBan(another);
         }
         board.movableToBlank();
         changeState();
