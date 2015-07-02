@@ -35,8 +35,8 @@ public class StartMenu extends ActionBarActivity {
             startActivity(intent);
         }
         if(v == vscpu){
-            Intent intent = new Intent(this, VSCPU.class);
-            startActivity(intent);
+            //Intent intent = new Intent(this, VSCPU.class);
+           // startActivity(intent);
         }
     }
 

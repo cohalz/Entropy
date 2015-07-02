@@ -1,3 +1,4 @@
+/*
 package com.example.cohalz.entropy;
 
 import android.content.Intent;
@@ -20,83 +21,81 @@ public class VSCPU extends Normal {
         super.onCreate(savedInstanceState);
     }
     @Override
-    public void onClick(View v){
-        for (int y = 0; y < 5; y++) {
-            for (int x = 0; x < 5; x++) {
-                if (v == view[y][x]) {
-                    Log.i("v", "x:" + x + ", y:" + y + ", flag:" + flag + ", ban:" + ban);
-                    if (flag == 0 && board[y][x] == ban) {
-                        if (isTouched(x, y, ban, board)) {
+    public void onClick(View v) {
+        int x=0,y=0;
+        for (y = 0; y < 5; y++)
+            for (x = 0; x < 5; x++)
+                if (v == view[y][x]) break;
+        Log.i("v", "x:" + x + ", y:" + y + ", flag:" + flag + ", ban:" + ban);
+        if (flag == 0 && board[y][x] == ban) {
+            if (!isIsolate(x, y, ban, board)) {
 
-                            if (movable(x, y, ban, board) > 0) {
-                                flag = 1;
-                                pastx = x;
-                                pasty = y;
-                            }
-                        }
-                    } else if (flag == 1) {
-                        aloneClear(board);
-                        if (board[y][x] == movable) {
-                            board[pasty][pastx] = blank;
-                            board[y][x] = ban;
-                            if (isClear(0,board)) {
-                                Intent intent = new Intent(this, p1win.class);
-                                startActivity(intent);
-                                // clear(ban);
-                                //return;
-                            } else if (isClear(1,board)) {
-                                Intent intent = new Intent(this, p2win.class);
-                                startActivity(intent);
-                                return;
+                if (movable(x, y, ban, board) > 0) {
+                    flag = 1;
+                    pastx = x;
+                    pasty = y;
+                }
+            }
+        } else if (flag == 1) {
+            aloneClear(board);
+            if (board[y][x] == movable) {
+                board[pasty][pastx] = blank;
+                board[y][x] = ban;
+                if (isClear(0, board)) {
+                    Intent intent = new Intent(this, p1win.class);
+                    startActivity(intent);
+                    // clear(ban);
+                    //return;
+                } else if (isClear(1, board)) {
+                    Intent intent = new Intent(this, p2win.class);
+                    startActivity(intent);
+                    return;
 
-                            } else {
-                                ban = (ban + 1) % 2;
-                                if (isPass(ban,board)) {
-                                    movableShowReset(board);
-                                    display(board);
-                                    ban = (ban + 1) % 2;
-                                    flag = 0;
-                                    if(ban == 1){
-                                        alfabeta(board, ban, MAXCOUNT, Integer.MIN_VALUE, Integer.MAX_VALUE);
-                                        return;
-                                    }
-                                    if(isPass(ban, board)){
-                                        status.setText("draw");
-                                        flag = 3;
-                                    }
-                                } else
-                                    setText(ban);
-                            }
-                        }
+                } else {
+                    ban = (ban + 1) % 2;
+                    if (isPass(ban, board)) {
                         movableShowReset(board);
-                        flag = 0;
                         display(board);
-                        if(ban == 1 && flag == 0) {
-                            display(board);
+                        ban = (ban + 1) % 2;
+                        flag = 0;
+                        if (ban == 1) {
                             alfabeta(board, ban, MAXCOUNT, Integer.MIN_VALUE, Integer.MAX_VALUE);
                             return;
                         }
-
-                    } else if (flag == 2) {
-                        movableShowReset(board);
-                        status.setText(Integer.toString(ban + 1) + "P Win!");
-                    } else if (flag == 3) {
-                        movableShowReset(board);
-                        status.setText("draw");
-                    }
+                        if (isPass(ban, board)) {
+                            status.setText("draw");
+                            flag = 3;
+                        }
+                    } else
+                        setText(ban);
                 }
             }
-        }
-        display(board);
+            movableShowReset(board);
+            flag = 0;
+            display(board);
+            if (ban == 1 && flag == 0) {
+                display(board);
+                alfabeta(board, ban, MAXCOUNT, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                return;
+            }
 
+        } else if (flag == 2) {
+            movableShowReset(board);
+            status.setText(Integer.toString(ban + 1) + "P Win!");
+        } else if (flag == 3) {
+            movableShowReset(board);
+            status.setText("draw");
+        }
+
+        display(board);
 
     }
 
-    public LinkedList<Integer> movableList(int ban, int[][] board){
-        LinkedList<Integer> list = new LinkedList<>();
+    public LinkedList<Move> movableList(int ban, int[][] board){
+        LinkedList<Move> list = new LinkedList<>();
         for (int y = 0;y < 5; y++){
             for(int x = 0;x < 5;x++){
-                if(board[y][x] == ban && isTouched(x, y, ban, board) && movable(x, y, ban, board) > 0) {
+                if(board[y][x] == ban && !isIsolate(x, y, ban, board) && movable(x, y, ban, board) > 0) {
                     list.addAll(addMovable(x,y,board));
                     movableShowReset(board);
                 }
@@ -106,8 +105,8 @@ public class VSCPU extends Normal {
         return list;
     }
 
-    public LinkedList<Integer> addMovable(int x, int y, int[][] board) {
-        LinkedList<Integer> list = new LinkedList<>();
+    public LinkedList<Move> addMovable(int x, int y, int[][] board) {
+        LinkedList<Move> list = new LinkedList<>();
         list.addAll(addVec(x, y, 1, 1, board));
         list.addAll(addVec(x, y, 1, 0, board));
         list.addAll(addVec(x, y, 1, -1, board));
@@ -119,16 +118,13 @@ public class VSCPU extends Normal {
         return list;
     }
 
-    public LinkedList<Integer> addVec(int x, int y, int xVec, int yVec, int[][] board) {
+    public LinkedList<Move> addVec(int x, int y, int xVec, int yVec, int[][] board) {
         int xi = x + xVec;
         int yi = y + yVec;
-        LinkedList<Integer> list = new LinkedList<>();
+        LinkedList<Move> list = new LinkedList<>();
         while (xi < 5 && xi >= 0 && yi < 5 && yi >= 0 && board[yi][xi] != p1 && board[yi][xi] != p2) {
             if(board[yi][xi] == movable){
-                list.add(x);
-                list.add(y);
-                list.add(xi);
-                list.add(yi);
+                list.add(new Move(x,y,xi,yi));
             }
             yi += yVec;
             xi += xVec;
@@ -161,17 +157,18 @@ public class VSCPU extends Normal {
         int maxprevy = -1;
         int maxx = -1;
         int maxy = -1;
-        int prevx = -1;
-        int prevy = -1;
-        int x = -1;
-        int y = -1;
+        int fromX = -1;
+        int fromY = -1;
+        int toX = -1;
+        int toY = -1;
         int val;
+        Move move,maxMove = new Move(-1,-1,-1,-1);
         int[][] copyBoard = new int[5][5];
         for(int i = 0;i < 5;i++){
                 copyBoard[i] = board[i].clone();
         }
         if(count == 0) return eval(ban,copyBoard);
-        LinkedList<Integer> list = movableList(ban, copyBoard);
+        LinkedList<Move> list = movableList(ban, copyBoard);
         if(isClear(1, board)) {
             return 1000;
         }
@@ -182,13 +179,10 @@ public class VSCPU extends Normal {
             for(int j = 0;j < 5;j++){
                 copyBoard[j] = board[j].clone();
             }
-            prevx = list.remove();
-            prevy = list.remove();
-            x = list.remove();
-            y = list.remove();
-            int tmp = copyBoard[prevy][prevx];
-            copyBoard[prevy][prevx] = copyBoard[y][x];
-            copyBoard[y][x] = tmp;
+            move = list.remove();
+            int tmp = copyBoard[move.fromY][move.fromX];
+            copyBoard[move.fromY][move.fromX] = copyBoard[move.toY][move.toX];
+            copyBoard[move.toY][move.toX] = tmp;
 
             val = alfabeta(copyBoard,(ban+1)%2,count-1,alfa,beta);
            // Log.i("v","val:"+val+", count"+count);
@@ -206,22 +200,15 @@ public class VSCPU extends Normal {
                         )
                 {
                     max = val;
-                    maxprevx = prevx;
-                    maxprevy = prevy;
-                    maxx = x;
-                    maxy = y;
+                    maxMove = new Move(fromX,fromY,toX,toY);
                 }
             }
         }
         //最も浅い部分で最大値を取得しその場所をクリックさせる
 
         if(count == MAXCOUNT){
-            bprex = maxprevx;
-            bprey = maxprevy;
-            bx = maxx;
-            by = maxy;
-            view[maxprevy][maxprevx].performClick();
-            view[maxy][maxx].performClick();
+            view[maxMove.fromY][maxMove.fromX].performClick();
+            view[maxMove.toX][maxMove.toX].performClick();
             return -1;
         } else{
             if(ban == 0) return beta;
@@ -252,3 +239,4 @@ public class VSCPU extends Normal {
         return super.onOptionsItemSelected(item);
     }
 }
+*/
