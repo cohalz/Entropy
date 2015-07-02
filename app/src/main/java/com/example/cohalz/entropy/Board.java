@@ -221,4 +221,8 @@ public class Board {
             }
         }
     }
+
+    public void display(){
+        viewBoard.display(state);
+    }
 }

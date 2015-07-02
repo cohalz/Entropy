@@ -29,6 +29,10 @@ public class BluetoothActivity extends Normal {
     private final Handler mHandler = new Handler();
     private Bt mBt;
 
+    public BluetoothActivity(int n) {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,18 +136,19 @@ public class BluetoothActivity extends Normal {
         mBt.onActivityResult(requestCode, resultCode, data);
     }
 
-/*    public void invalidate() {
+    public void invalidate() {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                display(board);
-                if (ban == 1)
-                    status.setText("2P");
-                else
-                    status.setText("1P");
+                board.display();
+                for (int i = 0; i < 5; i++) {
+                    if (players[i].ban) {
+                        status.setText(players[i].number + 1 + "P");
+                    }
+                }
             }
         });
-    }*/
+    }
     public void receiveMessage(String message) {
         StringTokenizer st = new StringTokenizer(message, ",");
         int newx = Integer.parseInt(st.nextToken());
@@ -185,9 +190,13 @@ public class BluetoothActivity extends Normal {
                 if(players[i].state == FROM){
                     players[i].doFromClick(board,point);
                 } else {
-                    String message = String.valueOf(players[i].move.to.x) + "," + String.valueOf(players[i].move.to.y) +
-                            "," + String.valueOf(players[i].move.from.x) + "," + String.valueOf(players[i].move.from.y)
-                            + "," + String.valueOf(players[i].number);
+                    String message =
+                            String.valueOf(players[i].move.to.x) + "," +
+                            String.valueOf(players[i].move.to.y) + "," +
+                            String.valueOf(players[i].move.from.x) + "," +
+                            String.valueOf(players[i].move.from.y) + "," +
+                            String.valueOf(players[i].number);
+                    
                     if (message != null) {
                         invalidate();
                         mBt.sendMessage(message);
