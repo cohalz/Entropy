@@ -179,18 +179,20 @@ public class BluetoothActivity extends Normal {
                 if(players[i].state == FROM){
                     players[i].doFromClick(board,point);
                 } else {
-                    String message =
+                    if(board.checkToPoint(point)){
+                        players[i].doToClick(players[(i+1)%2],board,point);
+                        String message =
                             String.valueOf(players[i].move.to.x) + "," +
                             String.valueOf(players[i].move.to.y) + "," +
                             String.valueOf(players[i].move.from.x) + "," +
                             String.valueOf(players[i].move.from.y) + "," +
                             String.valueOf(players[i].number);
                     
-                    if (message != null) {
-                        invalidate();
-                        mBt.sendMessage(message);
+                        if (message != null) {
+                            invalidate();
+                            mBt.sendMessage(message);
+                        }
                     }
-                    players[i].doToClick(players[(i+1)%2],board,point);
                 }
                 break;
             }
