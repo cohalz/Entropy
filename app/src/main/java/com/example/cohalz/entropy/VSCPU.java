@@ -202,8 +202,7 @@ public class VSCPU extends Normal {
                     if (count != MAXCOUNT && alfa >= beta) return alfa;
                 }
             }else {
-                if(val > max
-                        )
+                if(val > max)
                 {
                     max = val;
                     maxprevx = prevx;
@@ -216,10 +215,6 @@ public class VSCPU extends Normal {
         //最も浅い部分で最大値を取得しその場所をクリックさせる
 
         if(count == MAXCOUNT){
-            bprex = maxprevx;
-            bprey = maxprevy;
-            bx = maxx;
-            by = maxy;
             view[maxprevy][maxprevx].performClick();
             view[maxy][maxx].performClick();
             return -1;

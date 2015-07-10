@@ -172,7 +172,7 @@ public class BluetoothActivity extends Normal {
             for (int x = 0; x < 5; x++) {
                 if (v == view[y][x]) {
                     Log.i("v", "x:" + x + ", y:" + y + ", flag:" + flag);
-                    if (flag == 0 && board[y][x] == ban) {
+                    if (flag == 0 && board[y][x] == ban && ban == mBt.turn) {
                         if (isTouched(x, y, ban, board)) {
 
                             if (movable(x, y, ban, board) > 0) {

@@ -18,7 +18,7 @@ public class Normal extends ActionBarActivity {
     int blankimage = R.drawable.white;
     int movableimage = R.drawable.gray;
 
-    int flag = 0;
+    int flag = 0; // 0がどこから押すかを見る　１がどこへ押すかを見る
     int blank = -1;
     int p1 = 0;
     int p2 = 1;
