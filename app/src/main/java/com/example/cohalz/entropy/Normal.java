@@ -1,5 +1,6 @@
 package com.example.cohalz.entropy;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -23,8 +24,8 @@ public class Normal extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_normal);
 
-        p1 = new Player(0,true);
-        p2 = new Player(1,false);
+        p1 = new Player(0,true,this,p1win.class);
+        p2 = new Player(1,false,this,p2win.class);
         players = new Player[]{p1, p2};
         board = new Board(this);
         status = (TextView) findViewById(R.id.status);
@@ -47,7 +48,7 @@ public class Normal extends ActionBarActivity {
                 if(players[i].state == FROM){
                     players[i].doFromClick(board,point);
                 } else {
-                    players[i].doToClick(players[(i+1)%2],board,point);
+                    players[i].doToClick(players[(i + 1) % 2], board, point);
                 }
                 break;
             }

@@ -22,8 +22,8 @@ public class VSCPU extends Normal {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        p1 = new CPUPlayer(0, true, false);
-        p2 = new CPUPlayer(1,false, true);
+        p1 = new CPUPlayer(0, true, this, p1win.class, false);
+        p2 = new CPUPlayer(1,false, this, p2win.class, true);
         players = new CPUPlayer[]{p1, p2};
     }
 

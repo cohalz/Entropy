@@ -1,5 +1,6 @@
 package com.example.cohalz.entropy;
 
+import android.content.Context;
 import android.graphics.Point;
 
 import java.util.LinkedList;
@@ -9,8 +10,8 @@ import java.util.LinkedList;
  */
 public class CPUPlayer extends Player {
 
-    public CPUPlayer(int number, boolean ban, boolean cpuFlag){
-        super(number, ban);
+    public CPUPlayer(int number, boolean ban,Context act, Class<?> cls, boolean cpuFlag){
+        super(number, ban, act,cls);
         this.cpuFlag = cpuFlag;
     }
 
@@ -28,6 +29,8 @@ public class CPUPlayer extends Player {
         }
         board.movableToBlank();
         changeState();
+        if(isClear(board)) clear();
+        else if(another.isClear(board)) another.clear();
     }
 
     public Move alfabeta(Player another, Board board){
