@@ -11,4 +11,11 @@ public class Move{
          this.from = from;
          this.to = to;
     }
+
+    public void printMove(){
+        System.out.println("from.x: " + from.x);
+        System.out.println("from.y: " + from.y);
+        System.out.println("to.x: " + to.x);
+        System.out.println("to.y: " + to.y);
+    }
 }

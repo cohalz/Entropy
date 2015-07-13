@@ -1,8 +1,10 @@
 package com.example.cohalz.entropy;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Point;
-
 import static com.example.cohalz.entropy.Constants.*;
+
 
 /**
  * Created by cohalz on 15/07/01.
@@ -11,6 +13,7 @@ public class Player {
     int number;
     boolean ban;
     boolean state;
+    public boolean cpuFlag;
     Move move;
 
     public Player(int number, boolean ban){
@@ -57,4 +60,12 @@ public class Player {
         changeState();
     }
 
+    public boolean isClear(Board board){
+        return board.isClear(number);
+    }
+
+/*    public void clear(){
+        Intent win = new Intent(a, c);
+        startActivity(win);
+    }*/
 }
