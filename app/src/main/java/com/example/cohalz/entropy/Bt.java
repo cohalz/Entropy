@@ -24,7 +24,6 @@ import static android.app.Activity.RESULT_OK;
  * Created by ryu on 2015/05/17.
  */
 public class Bt {
-    int turn = 0;
     private abstract class ReceiverThread extends Thread {
         protected BluetoothSocket mSocket;
 
@@ -65,7 +64,7 @@ public class Bt {
                 Log.d(TAG, "accepting...");
                 mSocket = mServerSocket.accept();
                 Log.d(TAG, "accepted");
-                turn = 0;
+                activity.turn = 0;
                 loop();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -101,7 +100,7 @@ public class Bt {
             try {
                 // サーバに接続する
                 mSocket.connect();
-                turn = 1;
+                activity.turn = 1;
                 loop();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -218,6 +217,7 @@ public class Bt {
 
     public void sendMessage(String message) {
         try {
+            activity.test1();
             if (mServerThread != null) {
                 mServerThread.sendMessage(message);
             }
