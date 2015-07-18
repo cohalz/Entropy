@@ -17,9 +17,9 @@ public class Player {
     boolean ban;
     boolean state;
     public boolean cpuFlag;
-    private Context act;
-    private Class<?> cls;
     Move move;
+    Context act;
+    Class<?> cls;
 
     public Player(int number, boolean ban, Context act, Class<?> cls){
         this.number = number;
@@ -51,7 +51,7 @@ public class Player {
     }
 
     public void doFromClick(Board board, Point point){
-        if(board.checkFromPoint(this, point)) {
+        if(board.checkFromPoint(this,point)) {
             move.from = point;
             changeState();
         }
@@ -65,11 +65,6 @@ public class Player {
         }
         board.movableToBlank();
         changeState();
-
-        if(another.isPass(board)) another.allChangeBan(this);
-
-        if(isClear(board)) clear();
-        else if(another.isClear(board)) another.clear();
     }
 
     public boolean isClear(Board board){
@@ -80,10 +75,4 @@ public class Player {
         Intent win = new Intent(act, cls);
         act.startActivity(win);
     }
-
-    public boolean isPass(Board board){
-        return board.isPass(number);
-    }
 }
-
-

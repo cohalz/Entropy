@@ -25,7 +25,6 @@ public class Board {
                 {1, -1, -1, -1, 1},
                 {1, 1, 1, 1, 1}
         };
-
         for (int i = 0; i < 5; i++) {
             state[i] = tmpArray[i].clone();
         }
@@ -416,19 +415,4 @@ public class Board {
             else return new PositionAndValue(move, alfa);
         }
     }
-
-    public boolean isPass(int number) {
-        int count = 0;
-        for (int y = 0; y < 5; y++) {
-            for (int x = 0; x < 5; x++) {
-                Point p = new Point(x,y);
-                if (state[y][x] == number)
-                    if (!isIsolate(p, number))
-                        count += movable(p,number);
-                movableToBlank();
-            }
-        }
-        return count == 0;
-    }
-
 }
