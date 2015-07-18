@@ -1,9 +1,12 @@
 package com.example.cohalz.entropy;
 
 import android.app.Activity;
-import android.view.View;
 import android.widget.ImageView;
-import static com.example.cohalz.entropy.Constants.*;
+
+import static com.example.cohalz.entropy.Constants.BLANK;
+import static com.example.cohalz.entropy.Constants.MOVABLE;
+import static com.example.cohalz.entropy.Constants.P1;
+import static com.example.cohalz.entropy.Constants.P2;
 
 /**
  * Created by cohalz on 15/06/30.
@@ -15,6 +18,32 @@ public class ViewBoard {
     public ViewBoard(int[][] board, Activity a){
         image = new Image();
         view = new ImageView[5][5];
+/*        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(150, 150);
+        view[0][0].setLayoutParams(lp);
+        view[0][1].setLayoutParams(lp);
+        view[0][2].setLayoutParams(lp);
+        view[0][3].setLayoutParams(lp);
+        view[0][4].setLayoutParams(lp);
+        view[1][0].setLayoutParams(lp);
+        view[1][1].setLayoutParams(lp);
+        view[1][2].setLayoutParams(lp);
+        view[1][3].setLayoutParams(lp);
+        view[1][4].setLayoutParams(lp);
+        view[2][0].setLayoutParams(lp);
+        view[2][1].setLayoutParams(lp);
+        view[2][2].setLayoutParams(lp);
+        view[2][3].setLayoutParams(lp);
+        view[2][4].setLayoutParams(lp);
+        view[3][0].setLayoutParams(lp);
+        view[3][1].setLayoutParams(lp);
+        view[3][2].setLayoutParams(lp);
+        view[3][3].setLayoutParams(lp);
+        view[3][4].setLayoutParams(lp);
+        view[4][0].setLayoutParams(lp);
+        view[4][1].setLayoutParams(lp);
+        view[4][2].setLayoutParams(lp);
+        view[4][3].setLayoutParams(lp);
+        view[4][4].setLayoutParams(lp);*/
         view[0][0] = (ImageView) a.findViewById(R.id.imageView0);
         view[0][1] = (ImageView) a.findViewById(R.id.imageView1);
         view[0][2] = (ImageView) a.findViewById(R.id.imageView2);
@@ -45,22 +74,27 @@ public class ViewBoard {
     }
     public void display(int[][] board){
         for(int i = 0; i < 5; i++){
-            for(int j = 0; j < 5; j++){
+            for(int j = 0; j < 5; j++) {
                 switch (board[i][j]){
                     case P1:
                         view[i][j].setTag(image.p1);
+                        //view[i][j].setImageResource(R.drawable.tiger);
                         break;
                     case P2:
                         view[i][j].setTag(image.p2);
+                        //view[i][j].setImageResource(R.drawable.dragon);
                         break;
                     case BLANK:
                         view[i][j].setTag(image.blank);
+                        //view[i][j].setImageResource(R.drawable.white);
                         break;
                     case MOVABLE:
                         view[i][j].setTag(image.movable);
+                        //view[i][j].setImageResource(R.drawable.gray);
                         break;
                     default:
                         view[i][j].setTag(image.green);
+                        //view[i][j].setImageResource(R.drawable.green);
                 }
                 view[i][j].setImageResource((int) view[i][j].getTag());
             }

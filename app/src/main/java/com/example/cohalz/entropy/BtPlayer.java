@@ -1,37 +1,27 @@
 package com.example.cohalz.entropy;
 
+import android.content.Context;
 import android.graphics.Point;
 
 /**
  * Created by cohalz on 15/07/02.
  */
 public class BtPlayer extends Player {
-    Bt bt;
+    boolean Mflag = false;
     BluetoothActivity act;
-    public BtPlayer(int number, boolean ban, Bt bt, BluetoothActivity act){
-        super(number,ban);
-        this.bt = bt;
-        this.act = act;
+    public BtPlayer(int number, boolean ban, Context act, Class<?> cls){
+        super(number, ban,act,cls);
     }
 
     @Override
     public void doToClick(Player another, Board board,Point point){
-        super.doToClick(another,board,point);
-
         if (board.checkToPoint(point)){
-            String message =
-                    String.valueOf(move.to.x) + "," +
-                            String.valueOf(move.to.y) + "," +
-                            String.valueOf(move.from.x) + "," +
-                            String.valueOf(move.from.y) + "," +
-                            String.valueOf(number);
-
-            if (message != null) {
-                act.invalidate();
-                bt.sendMessage(message);
-            }
+            move.to = point;
+            change(board);
+            allChangeBan(another);
+            Mflag = true;
         }
-        act.invalidate();
+        board.movableToBlank();
+        changeState();
     }
-
 }

@@ -16,9 +16,19 @@ public class Normal extends ActionBarActivity {
     Player[] players;
     Board board;
 
+
     TextView status;
     TextView log;
 
+    void test1(){
+        log.setText("test1");
+    }
+    void test2(){
+        log.setText("test2");
+    }
+    void test3(){
+        log.setText("test3");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +59,13 @@ public class Normal extends ActionBarActivity {
                     players[i].doFromClick(board,point);
                 } else {
                     players[i].doToClick(players[(i + 1) % 2], board, point);
+                    try {
+                        status.setText("aaa");
+                        wait(3000);
+                        status.setText("");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             }

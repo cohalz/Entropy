@@ -10,6 +10,8 @@ import static com.example.cohalz.entropy.Constants.*;
 /**
  * Created by cohalz on 15/07/01.
  */
+
+
 public class Player {
     int number;
     boolean ban;
