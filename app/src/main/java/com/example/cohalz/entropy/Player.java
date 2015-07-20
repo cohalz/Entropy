@@ -75,4 +75,13 @@ public class Player {
         Intent win = new Intent(act, cls);
         act.startActivity(win);
     }
+
+    public boolean isPass(Board board){
+        return board.isPass(number);
+    }
+
+    public void pass(Player another){
+        allChangeBan(another);
+        changeState();
+    }
 }

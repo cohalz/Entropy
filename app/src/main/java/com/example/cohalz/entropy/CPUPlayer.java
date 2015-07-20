@@ -21,17 +21,29 @@ public class CPUPlayer extends Player {
             move.to = point;
             change(board);
             allChangeBan(another);
+            if(isClear(board)) {
+                clear();
+                return;
+            }
             if(another.cpuFlag){
-                Move m =  alfabeta(another,board);
-                another.doFromClick(board,m.from);
-                another.doToClick(this, board, m.to);
+                PositionAndValue pv =  alfabeta(another,board);
+                System.out.println(pv.value);
+                if(pv.value == Integer.MIN_VALUE) {
+                    pass(another);
+                    return;
+                }
+                else {
+                    another.doFromClick(board, pv.m.from);
+                    another.doToClick(this, board, pv.m.to);
+                    return; //changeStateが複数回呼ばれるのを防ぐ
+                }
             }
         }
         board.movableToBlank();
         changeState();
     }
 
-    public Move alfabeta(Player another, Board board){
-        return board.alfabeta(this,another,board.getState(),another.number,3,Integer.MIN_VALUE,Integer.MAX_VALUE).m;
+    public PositionAndValue alfabeta(Player another, Board board){
+        return board.alfabeta(this,another,board.getState(),another.number,3,Integer.MIN_VALUE,Integer.MAX_VALUE);
     }
 }

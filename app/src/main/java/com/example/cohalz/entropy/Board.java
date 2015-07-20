@@ -337,11 +337,15 @@ public class Board {
         return true;
     }
 
+    public boolean isPass(int number) {
+        return movableList(number).size() == 0;
+    }
+
     public PositionAndValue eval(int ban){
         Move m = new Move(new Point(-1, -1), new Point(-1, -1));
         int val = movableList((ban+1)%2).size();
         //System.out.println("eval: " + val);
-        return new PositionAndValue(m, val);
+        return new PositionAndValue(m, -val);
     }
 
 
@@ -373,7 +377,7 @@ public class Board {
         if (copyBoard.isClear(another.number)) {
             return new PositionAndValue(move, -1000);
         }
-
+        if(list.isEmpty()) return new PositionAndValue(move,Integer.MIN_VALUE);
         while (!list.isEmpty()) {
             for (int i = 0; i < 5; i++) {
                 copy[i] = board[i].clone();
@@ -387,18 +391,18 @@ public class Board {
             copyBoard.state[move.to.y][move.to.x] = tmp;
 
 
-            if (ban == cpu.number) {
-                val = alfabeta(cpu, another, copyBoard.state, (ban + 1) % 2, count - 1, alfa, beta).value;
-                alfa = Math.max(alfa,val);
-                if (alfa >= beta) return new PositionAndValue(move, beta);
+            val = alfabeta(cpu, another, copyBoard.state, (ban + 1) % 2, count - 1, alfa, beta).value;
+            if (count != MAXCOUNT) {
+                if (ban == cpu.number) {
+                    alfa = Math.max(alfa, val);
+                    if (alfa >= beta) return new PositionAndValue(move, beta);
+                } else {
+                    beta = Math.min(beta, val);
+                    if (alfa >= beta) return new PositionAndValue(move, alfa);
+                }
             } else {
-                val = alfabeta(cpu, another, copyBoard.state, (ban + 1) % 2, count - 1, alfa, beta).value;
-                beta = Math.min(beta,val);
-                if (alfa >= beta) return new PositionAndValue(move, alfa);
-            }
-            if (count == MAXCOUNT) {
                 if (val > max) {
-                    System.out.println("val:" + val);
+                   // System.out.println("val:" + val);
                     max = val;
                     maxMove = move;
                 }
@@ -406,9 +410,8 @@ public class Board {
         }
 
         if (count == MAXCOUNT) {
-            System.out.println("max: " + max);
-            maxMove.printMove();
-
+            //System.out.println("max: " + max);
+            //maxMove.printMove();
             return new PositionAndValue(maxMove, max);
         } else {
             if (ban == another.number) return new PositionAndValue(move, beta);
