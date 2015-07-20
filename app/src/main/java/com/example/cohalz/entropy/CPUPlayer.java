@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public class CPUPlayer extends Player {
 
     public CPUPlayer(int number, boolean ban, Context act, Class<?> cls, boolean cpuFlag){
-        super(number, ban, act,cls);
+        super(number, ban, act, cls);
         this.cpuFlag = cpuFlag;
     }
 
@@ -21,10 +21,17 @@ public class CPUPlayer extends Player {
             move.to = point;
             change(board);
             allChangeBan(another);
+
             if(isClear(board)) {
                 clear();
                 return;
             }
+
+            if(another.isClear(board)) {
+                another.clear();
+                return;
+            }
+
             if(another.cpuFlag){
                 PositionAndValue pv =  alfabeta(another,board);
                 System.out.println(pv.value);
