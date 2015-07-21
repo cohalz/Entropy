@@ -14,7 +14,7 @@ public class p1win extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p1win);
         ImageView imageView1 = (ImageView)findViewById(R.id.imageView);
-        imageView1.setImageResource(R.drawable.tiger_win);
+        imageView1.setImageResource(R.drawable.dragon_win);
     }
 
     @Override

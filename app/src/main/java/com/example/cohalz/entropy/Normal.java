@@ -33,8 +33,8 @@ public class Normal extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_normal);
 
-        p1 = new Player(0,true, this, p1win.class);
-        p2 = new Player(1,false, this, p2win.class);
+        p1 = new Player(1,true, this, p1win.class);
+        p2 = new Player(0,false, this, p2win.class);
         players = new Player[]{p1, p2};
         board = new Board(this);
         status = (TextView) findViewById(R.id.status);

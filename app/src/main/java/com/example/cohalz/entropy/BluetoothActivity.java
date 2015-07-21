@@ -28,8 +28,8 @@ public class BluetoothActivity extends Normal {
     private final Handler mHandler = new Handler();
     private Bt mBt;
 
-    public BtPlayer p1 = new BtPlayer(0, true,this,p1win.class);
-    public BtPlayer p2 = new BtPlayer(1, false,this,p2win.class);
+    public BtPlayer p1 = new BtPlayer(1, true,this,p1win.class);
+    public BtPlayer p2 = new BtPlayer(0, false,this,p2win.class);
     public BtPlayer[] players = new BtPlayer[]{p1, p2};
 
     int fromx, fromy, tox, toy;
