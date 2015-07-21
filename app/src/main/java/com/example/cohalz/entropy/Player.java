@@ -65,6 +65,17 @@ public class Player {
         }
         board.movableToBlank();
         changeState();
+
+        if(isClear(board)) {
+            clear();
+            return;
+        }
+
+        if(another.isClear(board)) {
+            another.clear();
+            return;
+        }
+
     }
 
     public boolean isClear(Board board){

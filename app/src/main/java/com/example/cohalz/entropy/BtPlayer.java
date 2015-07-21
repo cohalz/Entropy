@@ -23,5 +23,16 @@ public class BtPlayer extends Player {
         }
         board.movableToBlank();
         changeState();
+
+        if(isClear(board)) {
+            clear();
+            return;
+        }
+
+        if(another.isClear(board)) {
+            another.clear();
+            return;
+        }
+        if(isPass(board)) pass(another);
     }
 }

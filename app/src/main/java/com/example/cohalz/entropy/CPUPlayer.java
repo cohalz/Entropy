@@ -48,6 +48,7 @@ public class CPUPlayer extends Player {
         }
         board.movableToBlank();
         changeState();
+        if(isPass(board)) pass(another);
     }
 
     public PositionAndValue alfabeta(Player another, Board board){
