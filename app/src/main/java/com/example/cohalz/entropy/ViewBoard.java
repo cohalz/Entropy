@@ -18,32 +18,6 @@ public class ViewBoard {
     public ViewBoard(int[][] board, Activity a){
         image = new Image();
         view = new ImageView[5][5];
-/*        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(150, 150);
-        view[0][0].setLayoutParams(lp);
-        view[0][1].setLayoutParams(lp);
-        view[0][2].setLayoutParams(lp);
-        view[0][3].setLayoutParams(lp);
-        view[0][4].setLayoutParams(lp);
-        view[1][0].setLayoutParams(lp);
-        view[1][1].setLayoutParams(lp);
-        view[1][2].setLayoutParams(lp);
-        view[1][3].setLayoutParams(lp);
-        view[1][4].setLayoutParams(lp);
-        view[2][0].setLayoutParams(lp);
-        view[2][1].setLayoutParams(lp);
-        view[2][2].setLayoutParams(lp);
-        view[2][3].setLayoutParams(lp);
-        view[2][4].setLayoutParams(lp);
-        view[3][0].setLayoutParams(lp);
-        view[3][1].setLayoutParams(lp);
-        view[3][2].setLayoutParams(lp);
-        view[3][3].setLayoutParams(lp);
-        view[3][4].setLayoutParams(lp);
-        view[4][0].setLayoutParams(lp);
-        view[4][1].setLayoutParams(lp);
-        view[4][2].setLayoutParams(lp);
-        view[4][3].setLayoutParams(lp);
-        view[4][4].setLayoutParams(lp);*/
         view[0][0] = (ImageView) a.findViewById(R.id.imageView0);
         view[0][1] = (ImageView) a.findViewById(R.id.imageView1);
         view[0][2] = (ImageView) a.findViewById(R.id.imageView2);
