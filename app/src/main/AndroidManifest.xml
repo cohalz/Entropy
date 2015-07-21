@@ -43,5 +43,8 @@
             android:label="@string/title_activity_vscpu" >
         </activity>
     </application>
-
+    <supports-screens android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:anyDensity="true"/>
 </manifest>
